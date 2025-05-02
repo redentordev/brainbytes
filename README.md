@@ -4,6 +4,14 @@
 
 BrainBytes is an AI-powered tutoring platform designed to provide accessible academic assistance to Filipino students. This project implements the platform using modern DevOps practices and containerization.
 
+## System Architecture
+
+![System Architecture](./docs/architecture.png)
+
+## CI/CD Pipeline
+
+![CI/CD Architecture](./docs/ci-cd-architecture.png)
+
 ## Team Members
 
 - Neiña Jeizrei Burce - Space Manager - [lr.njburce@mmdc.mcl.edu.ph]
@@ -27,3 +35,11 @@ BrainBytes is an AI-powered tutoring platform designed to provide accessible aca
 - IaC: SST/Pulumi
 - Cloud Provider: AWS
 - Monitoring: Prometheus, Grafana
+
+## Directory Structure
+
+```
+docs/
+  ├── architecture.png      # System architecture diagram
+  └── ci-cd-architecture.png # CI/CD pipeline diagram
+```
