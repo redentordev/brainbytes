@@ -9,6 +9,7 @@ services:
       dockerfile: Dockerfile.dev
     environment:
       - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/brainbytes
     command: bun run dev
     volumes:
       - ./packages/backend:/app
@@ -29,15 +30,16 @@ services:
       - /app/node_modules
       - /app/.next
 
-  mongodb:
-    image: mongo:latest
+  postgres:
+    image: postgres:latest
     ports:
-      - "27017:27017"
+      - "5432:5432"
     volumes:
-      - mongodb_data:/data/db
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=brainbytes
 
 volumes:
-  mongodb_data:
+  postgres_data:

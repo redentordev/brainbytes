@@ -14,16 +14,16 @@ BrainBytes is an AI-powered tutoring platform designed to provide accessible aca
 
 - Implement a containerized application with proper networking
 - Create an automated CI/CD pipeline using GitHub Actions
-- Deploy the application to Oracle Cloud Free Tier
+- Deploy the application to AWS
 - Set up monitoring and observability tools
 
 ## Technology Stack
 
+- Monorepo: NodeJS Workspaces
 - Frontend: Next.js
 - Backend: NodeJS / Hono
-- Database: MongoDB Atlas
-- Containerization: Docker / Docker Compose
-- Monorepo: NodeJS Workspaces
-- IaC: Terraform 
-- Cloud Provider:  Oracle Cloud Free Tier
+- Database: PostgreSQL
+- Containerization: Docker / ECS+Fargate
+- IaC: SST/Pulumi
+- Cloud Provider: AWS
 - Monitoring: Prometheus, Grafana
