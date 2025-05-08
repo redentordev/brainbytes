@@ -3,7 +3,7 @@ services:
     ports:
       - "3001:3001"
     build:
-      context: ./apps/backend
+      context: ./packages/backend
       dockerfile: Dockerfile.dev
     environment:
       - NODE_ENV=development
@@ -17,7 +17,7 @@ services:
     ports:
       - "3000:3000"
     build:
-      context: ./apps/frontend
+      context: ./packages/frontend
       dockerfile: Dockerfile.dev
     environment:
       - NODE_ENV=development
