@@ -2,14 +2,19 @@ FROM oven/bun:latest
 
 WORKDIR /app
 
+# Copy package.json files from the entire workspace
+COPY package.json ./
+COPY packages/backend/package.json ./packages/backend/
+
 # Install dependencies
-COPY package*.json ./
+WORKDIR /app/packages/backend
 RUN bun install
 
 # Copy source code
-COPY . .
+COPY packages/backend/ /app/packages/backend/
 
 # Expose the dev server port
 EXPOSE 3001
 
+WORKDIR /app/packages/backend
 CMD ["bun", "run", "--hot", "src/index.ts"] 
