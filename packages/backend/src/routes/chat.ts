@@ -10,11 +10,16 @@ const router = new Hono<{ Bindings: AuthType }>({
 });
 
 router.post("/chat", async (c) => {
+  const session = c.get("session");
+
+  if (!session) return c.json({ error: "Unauthorized" }, 401);
   try {
+    const user = c.get("user");
+
     const { messages }: { messages: CoreMessage[] } = await c.req.json();
 
     const result = streamText({
-      model: openai("gpt-4o-mini"),
+      model: openai("gpt-4.1-mini"),
       system: `You are BrainBytes AI, a chatbot designed to help students with their questions. 
 
        You are developed by BrainBytes Team.
@@ -26,6 +31,9 @@ router.post("/chat", async (c) => {
        - Abigail Galilo - Developer
 
        The current date and time is ${new Date().toLocaleString()}.
+
+       The user's name is ${user?.name}.
+       The user's email is ${user?.email}.
       `,
       messages,
     });

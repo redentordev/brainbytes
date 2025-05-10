@@ -19,11 +19,15 @@ export function ChatForm({
   const { data: session } = useSession();
   const { messages, input, setInput, append } = useChat({
     api: "http://localhost:3001/api/chat",
+    credentials: "include",
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    void append({ content: input, role: "user" });
+    void append({
+      content: input,
+      role: "user",
+    });
     setInput("");
   };
 

@@ -1,11 +1,19 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { stream } from "hono/streaming";
 import type { AuthType } from "./lib/auth";
-import auth from "./routes/auth";
-import chat from "./routes/chat";
+import authRouter from "./routes/auth";
+import chatRouter from "./routes/chat";
+import { auth } from "./lib/auth";
+import { User } from "better-auth/types";
+import { Session } from "better-auth/types";
 
-const app = new Hono<{ Bindings: AuthType }>({
+const app = new Hono<{
+  Bindings: AuthType;
+  Variables: {
+    user: User | null;
+    session: Session | null;
+  };
+}>({
   strict: false,
 });
 
@@ -21,7 +29,22 @@ app.use(
   })
 );
 
-const routes = [auth, chat] as const;
+app.use("*", async (c, next) => {
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+  console.log(session);
+
+  if (!session) {
+    c.set("user", null);
+    c.set("session", null);
+    return next();
+  }
+
+  c.set("user", session.user);
+  c.set("session", session.session);
+  return next();
+});
+
+const routes = [authRouter, chatRouter] as const;
 
 routes.forEach((route) => {
   app.basePath("/api").route("/", route);
