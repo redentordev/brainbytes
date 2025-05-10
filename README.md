@@ -15,6 +15,7 @@ BrainBytes is an AI-powered tutoring platform designed to provide accessible aca
 ## Team Members
 
 - Neiña Jeizrei Burce - Space Manager - [lr.njburce@mmdc.mcl.edu.ph]
+- Abigail Galilo - Team Member - [lr.agalilo@mmdc.mcl.edu.ph]
 - Michael Angel Lu - Team Member - [lr.malu@mmdc.mcl.edu.ph]
 - Redentor Valerio - Team Member - [lr.rvalerio@mmdc.mcl.edu.ph]
 
@@ -37,9 +38,3 @@ BrainBytes is an AI-powered tutoring platform designed to provide accessible aca
 - Monitoring: Prometheus, Grafana
 
 ## Directory Structure
-
-```
-docs/
-  ├── architecture.png      # System architecture diagram
-  └── ci-cd-architecture.png # CI/CD pipeline diagram
-```
