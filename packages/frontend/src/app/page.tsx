@@ -18,12 +18,15 @@ export default function Page() {
           className="cursor-pointer"
           variant="outline"
           type="button"
-          onClick={async () =>
+          onClick={async () => {
+            setIsLoading(true);
             await signIn.social({
               provider: "github",
               callbackURL: "http://localhost:3000",
-            })
-          }
+            });
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+            setIsLoading(false);
+          }}
         >
           {isLoading ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

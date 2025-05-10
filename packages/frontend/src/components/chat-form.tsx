@@ -44,7 +44,7 @@ export function ChatForm({
         Hello, {session?.user.name}
       </h1>
       <p className="text-sm text-muted-foreground">
-        I'm a BrainBytes AI, a chatbot that can help you with your questions.
+        I'm BrainBytes AI, a chatbot that can help you with your questions.
       </p>
     </header>
   );

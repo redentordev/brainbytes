@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Devops",
-  description: "Devops",
+  title: "BrainBytes AI",
+  description: "BrainBytes AI",
 };
 
 export default function RootLayout({
