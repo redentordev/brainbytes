@@ -50,6 +50,10 @@ routes.forEach((route) => {
   app.basePath("/api").route("/", route);
 });
 
+app.get("/", (c) => {
+  return c.json({ message: "version 0.0.1" });
+});
+
 export default {
   port: 3001,
   fetch: app.fetch,
