@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Loader2, Trash2 } from "lucide-react";
+import { Loader2, Trash2, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { MaterialTextEntry } from "@/contexts/learning-material-context";
@@ -7,9 +7,10 @@ import { MaterialTextEntry } from "@/contexts/learning-material-context";
 interface TextEntryItemProps {
   entry: MaterialTextEntry;
   onRemove: () => Promise<void>;
+  onEdit: () => void;
 }
 
-export function TextEntryItem({ entry, onRemove }: TextEntryItemProps) {
+export function TextEntryItem({ entry, onRemove, onEdit }: TextEntryItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -36,19 +37,29 @@ export function TextEntryItem({ entry, onRemove }: TextEntryItemProps) {
         >
           {entry.title}
         </button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-5 w-5"
-          onClick={handleRemove}
-          disabled={isDeleting}
-        >
-          {isDeleting ? (
-            <Loader2 size={12} className="animate-spin" />
-          ) : (
-            <Trash2 size={12} className="text-muted-foreground" />
-          )}
-        </Button>
+        <div className="flex items-center">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-5 w-5"
+            onClick={onEdit}
+          >
+            <Edit size={12} className="text-muted-foreground" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-5 w-5"
+            onClick={handleRemove}
+            disabled={isDeleting}
+          >
+            {isDeleting ? (
+              <Loader2 size={12} className="animate-spin" />
+            ) : (
+              <Trash2 size={12} className="text-muted-foreground" />
+            )}
+          </Button>
+        </div>
       </div>
 
       {isExpanded && (

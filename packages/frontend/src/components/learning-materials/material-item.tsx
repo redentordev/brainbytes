@@ -1,30 +1,57 @@
 import React, { useState } from "react";
-import { FileText, Loader2, Tag, Trash2 } from "lucide-react";
+import { FileText, Loader2, Tag, Trash2, Edit, PenSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { LearningMaterial } from "@/contexts/learning-material-context";
+import {
+  LearningMaterial,
+  MaterialTextEntry,
+} from "@/contexts/learning-material-context";
 import { cn } from "@/lib/utils";
 import { TextEntryItem } from "./text-entry-item";
+import { EditMaterialDialog } from "./edit-material-dialog";
+import { EditTextEntryDialog } from "./edit-text-entry-dialog";
 
 interface MaterialItemProps {
   material: LearningMaterial;
+  subjects: string[];
   toggleMaterial: (id: string) => void;
   removeMaterial: (id: string) => Promise<void>;
+  updateMaterial: (
+    id: string,
+    title: string,
+    description: string,
+    subject: string
+  ) => Promise<void>;
   onAddTextEntry: () => void;
   removeTextEntry: (entryId: string) => Promise<void>;
+  updateTextEntry: (
+    materialId: string,
+    entryId: string,
+    title: string,
+    content: string
+  ) => Promise<void>;
 }
 
 export function MaterialItem({
   material,
+  subjects,
   toggleMaterial,
   removeMaterial,
+  updateMaterial,
   onAddTextEntry,
   removeTextEntry,
+  updateTextEntry,
 }: MaterialItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showTextEntries, setShowTextEntries] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditMaterialDialogOpen, setIsEditMaterialDialogOpen] =
+    useState(false);
+  const [isEditTextEntryDialogOpen, setIsEditTextEntryDialogOpen] =
+    useState(false);
+  const [selectedTextEntry, setSelectedTextEntry] =
+    useState<MaterialTextEntry | null>(null);
 
   const handleToggle = () => {
     toggleMaterial(material.id);
@@ -56,6 +83,11 @@ export function MaterialItem({
     }
   };
 
+  const handleEditTextEntry = (entry: MaterialTextEntry) => {
+    setSelectedTextEntry(entry);
+    setIsEditTextEntryDialogOpen(true);
+  };
+
   return (
     <div
       className={cn(
@@ -65,19 +97,29 @@ export function MaterialItem({
     >
       <div className="flex items-center justify-between">
         <h3 className="font-medium">{material.title}</h3>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-7 w-7"
-          onClick={handleDelete}
-          disabled={isDeleting}
-        >
-          {isDeleting ? (
-            <Loader2 size={14} className="animate-spin" />
-          ) : (
-            <Trash2 size={14} className="text-muted-foreground" />
-          )}
-        </Button>
+        <div className="flex items-center">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={() => setIsEditMaterialDialogOpen(true)}
+          >
+            <Edit size={14} className="text-muted-foreground" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={handleDelete}
+            disabled={isDeleting}
+          >
+            {isDeleting ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <Trash2 size={14} className="text-muted-foreground" />
+            )}
+          </Button>
+        </div>
       </div>
       {material.subject && (
         <div className="mt-1 flex items-center">
@@ -136,6 +178,7 @@ export function MaterialItem({
                   key={entry.id}
                   entry={entry}
                   onRemove={() => removeTextEntry(entry.id)}
+                  onEdit={() => handleEditTextEntry(entry)}
                 />
               ))}
             </div>
@@ -146,6 +189,24 @@ export function MaterialItem({
           No text entries yet. Add your first entry above.
         </div>
       )}
+
+      {/* Edit Material Dialog */}
+      <EditMaterialDialog
+        isOpen={isEditMaterialDialogOpen}
+        onOpenChange={setIsEditMaterialDialogOpen}
+        material={material}
+        subjects={subjects}
+        updateMaterial={updateMaterial}
+      />
+
+      {/* Edit Text Entry Dialog */}
+      <EditTextEntryDialog
+        isOpen={isEditTextEntryDialogOpen}
+        onOpenChange={setIsEditTextEntryDialogOpen}
+        materialId={material.id}
+        textEntry={selectedTextEntry}
+        updateTextEntry={updateTextEntry}
+      />
     </div>
   );
 }

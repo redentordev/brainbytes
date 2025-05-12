@@ -41,8 +41,20 @@ interface LearningMaterialsContextType {
     description: string,
     subject: string
   ) => Promise<string>;
+  updateMaterial: (
+    id: string,
+    title: string,
+    description: string,
+    subject: string
+  ) => Promise<void>;
   addTextEntryToMaterial: (
     materialId: string,
+    title: string,
+    content: string
+  ) => Promise<void>;
+  updateTextEntry: (
+    materialId: string,
+    entryId: string,
     title: string,
     content: string
   ) => Promise<void>;
@@ -414,6 +426,89 @@ export function LearningMaterialsProvider({
     }
   );
 
+  // Add an update material mutation
+  const updateMaterialMutation = useMutation<
+    void,
+    Error,
+    { id: string; title: string; description: string; subject: string }
+  >(
+    async ({ id, title, description, subject }) => {
+      try {
+        const response = await fetch(`${API_URL}/materials/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ title, description, subject }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || "Failed to update material");
+        }
+      } catch (error) {
+        console.error("Error updating material:", error);
+        throw error;
+      }
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["materials"]);
+      },
+      onError: (error) => {
+        toast.error("Failed to update material", {
+          description: error.message || "Please try again",
+        });
+      },
+    }
+  );
+
+  // Add an update text entry mutation
+  const updateTextEntryMutation = useMutation<
+    void,
+    Error,
+    { materialId: string; entryId: string; title: string; content: string }
+  >(
+    async ({ materialId, entryId, title, content }) => {
+      try {
+        const response = await fetch(
+          `${API_URL}/materials/${materialId}/entries/${entryId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ title, content }),
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || "Failed to update text entry");
+        }
+      } catch (error) {
+        console.error("Error updating text entry:", error);
+        throw error;
+      }
+    },
+    {
+      onSuccess: (_, variables) => {
+        // Force a complete refetch of all materials to ensure text entries are updated
+        queryClient.invalidateQueries(["materials"]);
+
+        // Also refetch the specific material that was updated
+        queryClient.invalidateQueries(["materials", variables.materialId]);
+      },
+      onError: (error) => {
+        toast.error("Failed to update text entry", {
+          description: error.message || "Please try again",
+        });
+      },
+    }
+  );
+
   const addMaterial = async (
     title: string,
     description: string,
@@ -550,6 +645,62 @@ export function LearningMaterialsProvider({
     await removeMaterialMutation.mutateAsync(id);
   };
 
+  const updateMaterial = async (
+    id: string,
+    title: string,
+    description: string,
+    subject: string
+  ): Promise<void> => {
+    if (!title.trim()) {
+      toast.error("Title required", {
+        description: "Please provide a title for your learning material.",
+      });
+      throw new Error("Title required");
+    }
+
+    if (!subject) {
+      toast.error("Subject required", {
+        description: "Please select a subject for your material.",
+      });
+      throw new Error("Subject required");
+    }
+
+    await updateMaterialMutation.mutateAsync({
+      id,
+      title,
+      description,
+      subject,
+    });
+  };
+
+  const updateTextEntry = async (
+    materialId: string,
+    entryId: string,
+    title: string,
+    content: string
+  ): Promise<void> => {
+    if (!title.trim()) {
+      toast.error("Title required", {
+        description: "Please provide a title for your text entry.",
+      });
+      throw new Error("Title required");
+    }
+
+    if (!content.trim()) {
+      toast.error("Content required", {
+        description: "Please provide content for your text entry.",
+      });
+      throw new Error("Content required");
+    }
+
+    await updateTextEntryMutation.mutateAsync({
+      materialId,
+      entryId,
+      title,
+      content,
+    });
+  };
+
   const isLoading = isMaterialsLoading || isSubjectsLoading;
   const error = materialsError || subjectsError;
 
@@ -564,7 +715,9 @@ export function LearningMaterialsProvider({
         addSubject,
         removeSubject,
         addMaterial,
+        updateMaterial,
         addTextEntryToMaterial,
+        updateTextEntry,
         removeTextEntryFromMaterial,
         toggleMaterial,
         removeMaterial,

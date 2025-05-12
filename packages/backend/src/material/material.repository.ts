@@ -320,3 +320,31 @@ export async function deactivateAllMaterialsExcept(
       .where(eq(materials.userId, userId));
   }
 }
+
+export async function getActiveMaterialWithTextEntriesByUserId(
+  userId: string
+): Promise<(Material & { textEntries: MaterialTextEntry[] }) | null> {
+  const userMaterials = await db
+    .select()
+    .from(materials)
+    .where(and(eq(materials.userId, userId), eq(materials.isActive, true)))
+    .limit(1);
+
+  if (userMaterials.length === 0) {
+    return null;
+  }
+
+  const activeMaterial = userMaterials[0];
+
+  // Fetch text entries for this active material
+  const textEntries = await db
+    .select()
+    .from(materialTextEntries)
+    .where(eq(materialTextEntries.materialId, activeMaterial.id));
+
+  // Return material with its text entries
+  return {
+    ...activeMaterial,
+    textEntries,
+  };
+}

@@ -28,23 +28,21 @@ export function Navigation() {
               <span className="hidden sm:inline">Home</span>
             </Button>
           </Link>
-          <Link href="/profile">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground hover:text-foreground cursor-pointer"
-            >
-              <img
-                src={
-                  session.user.image ??
-                  "https://avatar.vercel.sh/" + session.user.email
-                }
-                alt={session.user.name + "'s avatar"}
-                className="h-6 w-6 rounded-full"
-              />
-              <span className="hidden sm:inline">{session.user.name}</span>
-            </Button>
-          </Link>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:text-foreground cursor-pointer"
+          >
+            <img
+              src={
+                session.user.image ??
+                "https://avatar.vercel.sh/" + session.user.email
+              }
+              alt={session.user.name + "'s avatar"}
+              className="h-6 w-6 rounded-full"
+            />
+            <span className="hidden sm:inline">{session.user.name}</span>
+          </Button>
           <LearningMaterialsSidebar />
         </div>
       </div>

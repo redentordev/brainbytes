@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useChat, type Message } from "@ai-sdk/react";
-import { ArrowUpIcon } from "lucide-react";
+import { ArrowUpIcon, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -11,16 +11,32 @@ import {
 } from "@/components/ui/tooltip";
 import { AutoResizeTextarea } from "@/components/autoresize-textarea";
 import { useSession } from "@/lib/auth";
+import { useEffect, useRef } from "react";
+import { useLearningMaterials } from "@/contexts/learning-material-context";
 
 export function ChatForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
   const { data: session } = useSession();
+  const { activeMaterial, materials } = useLearningMaterials();
   const { messages, input, setInput, append } = useChat({
     api: "http://localhost:3001/api/chat",
     credentials: "include",
   });
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const activeContextMaterial = materials.find((material) => material.isActive);
+  const currentActiveMaterial = activeMaterial || activeContextMaterial;
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,11 +62,27 @@ export function ChatForm({
       <p className="text-sm text-muted-foreground">
         I'm BrainBytes AI, a chatbot that can help you with your questions.
       </p>
+      {currentActiveMaterial && (
+        <div className="mx-auto mt-2 animate-fade-down">
+          <div className="rounded-full bg-blue-50 px-4 py-1.5 text-xs font-medium text-blue-600 border border-blue-200 shadow-sm flex items-center">
+            <BookOpen size={12} className="mr-1.5" />
+            Context: {currentActiveMaterial.title}
+          </div>
+        </div>
+      )}
     </header>
   );
 
   const messageList = (
     <div className="my-4 flex h-fit min-h-full flex-col gap-4">
+      {currentActiveMaterial && messages.length > 0 && (
+        <div className="self-center mb-2 animate-fade-down">
+          <div className="rounded-full bg-blue-50 px-4 py-1.5 text-xs font-medium text-blue-600 border border-blue-200 shadow-sm flex items-center">
+            <BookOpen size={12} className="mr-1.5" />
+            Context: {currentActiveMaterial.title}
+          </div>
+        </div>
+      )}
       {messages.map((message: Message, index: number) => (
         <div
           key={index}
@@ -60,6 +92,7 @@ export function ChatForm({
           {message.content}
         </div>
       ))}
+      <div ref={messagesEndRef} />
     </div>
   );
 

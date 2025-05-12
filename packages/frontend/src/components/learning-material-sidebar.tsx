@@ -6,68 +6,32 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import {
   Book,
   Plus,
-  Trash2,
   BookOpen,
   ChevronRight,
-  Tag,
-  Tags,
-  FileText,
   Loader2,
   AlertTriangle,
   RefreshCw,
-  ServerOff,
 } from "lucide-react";
-import {
-  useLearningMaterials,
-  LearningMaterial,
-  MaterialTextEntry,
-} from "@/contexts/learning-material-context";
+import { useLearningMaterials } from "@/contexts/learning-material-context";
 import { cn } from "@/lib/utils";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useQueryClient } from "react-query";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
-// Import modular components
 import { ConnectionError } from "./learning-materials/connection-error";
 import { SubjectManager } from "./learning-materials/subject-manager";
 import { MaterialItem } from "./learning-materials/material-item";
 import { AddMaterialDialog } from "./learning-materials/add-material-dialog";
 import { AddTextEntryDialog } from "./learning-materials/add-text-entry-dialog";
 import { AuthError } from "./learning-materials/auth-error";
-import { signIn, useSession } from "@/lib/auth";
+import { useSession } from "@/lib/auth";
 
 export function LearningMaterialsSidebar() {
   const queryClient = useQueryClient();
-  const { isPending, data: session } = useSession();
   const {
     materials,
     activeMaterial,
@@ -77,7 +41,9 @@ export function LearningMaterialsSidebar() {
     addSubject,
     removeSubject,
     addMaterial,
+    updateMaterial,
     addTextEntryToMaterial,
+    updateTextEntry,
     toggleMaterial,
     removeMaterial,
     removeTextEntryFromMaterial,
@@ -93,24 +59,20 @@ export function LearningMaterialsSidebar() {
   >(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Check if the error is a connection error (can't reach the server)
   const isConnectionError =
     error &&
     (error.message.includes("fetch") ||
       error.message.includes("network") ||
       error.message.includes("Failed to fetch"));
 
-  // Check if error is authentication related
   const isAuthError =
     error &&
     (error.message.includes("Unauthorized") ||
       error.message.includes("Authentication required") ||
       error.message.includes("401"));
 
-  // Find the currently active material, if any
   const activeContextMaterial = materials.find((material) => material.isActive);
 
-  // Use the active material from context, or the one found in materials array
   const currentActiveMaterial = activeMaterial || activeContextMaterial;
 
   const handleRefresh = async () => {
@@ -131,9 +93,7 @@ export function LearningMaterialsSidebar() {
   };
 
   const handleLogin = () => {
-    // Redirect to the login page or show a login modal
-    // This depends on how your auth flow is implemented
-    window.location.href = "/login"; // Replace with your actual login route
+    window.location.href = "/";
   };
 
   const filteredMaterials = selectedSubjectFilter
@@ -271,8 +231,10 @@ export function LearningMaterialsSidebar() {
                   <MaterialItem
                     key={material.id}
                     material={material}
+                    subjects={subjects}
                     toggleMaterial={toggleMaterial}
                     removeMaterial={removeMaterial}
+                    updateMaterial={updateMaterial}
                     onAddTextEntry={() => {
                       setSelectedMaterialId(material.id);
                       setIsTextEntryDialogOpen(true);
@@ -280,6 +242,7 @@ export function LearningMaterialsSidebar() {
                     removeTextEntry={(entryId) =>
                       removeTextEntryFromMaterial(material.id, entryId)
                     }
+                    updateTextEntry={updateTextEntry}
                   />
                 ))}
               </div>
@@ -288,7 +251,6 @@ export function LearningMaterialsSidebar() {
         </SheetContent>
       </Sheet>
 
-      {/* Add Material Dialog */}
       <AddMaterialDialog
         isOpen={isAddDialogOpen}
         onOpenChange={setIsAddDialogOpen}
@@ -296,22 +258,12 @@ export function LearningMaterialsSidebar() {
         addMaterial={addMaterial}
       />
 
-      {/* Add Text Entry Dialog */}
       <AddTextEntryDialog
         isOpen={isTextEntryDialogOpen}
         onOpenChange={setIsTextEntryDialogOpen}
         materialId={selectedMaterialId}
         addTextEntryToMaterial={addTextEntryToMaterial}
       />
-
-      {currentActiveMaterial && (
-        <div className="absolute bottom-20 left-0 right-0 mx-auto w-fit animate-fade-up">
-          <div className="rounded-full bg-blue-50 px-4 py-1.5 text-xs font-medium text-blue-600 border border-blue-200 shadow-sm flex items-center">
-            <BookOpen size={12} className="mr-1.5" />
-            Context: {currentActiveMaterial.title}
-          </div>
-        </div>
-      )}
     </>
   );
 }
