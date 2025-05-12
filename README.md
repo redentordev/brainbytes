@@ -12,8 +12,9 @@ BrainBytes is an **AI-powered tutoring platform** developed to make academic hel
 4. [CI/CD Pipeline](#ci-cd-pipeline)
 5. [Monitoring & Observability](#monitoring--observability)
 6. [Project Setup (Local)](#project-setup-local)
-7. [Team Members](#team-members)
-8. [License](#license)
+7. [API Documentation](packages/backend/docs/api-documentation.md)
+8. [Team Members](#team-members)
+9. [License](#license)
 
 ---
 
