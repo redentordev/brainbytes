@@ -2,7 +2,9 @@
 
 import { signOut, useSession } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { LogOut, Home, LayoutDashboard, User } from "lucide-react";
+import Link from "next/link";
+import { LearningMaterialsSidebar } from "@/components/learning-material-sidebar";
 
 export function Navigation() {
   const { data: session } = useSession();
@@ -16,17 +18,34 @@ export function Navigation() {
       <div className="flex items-center gap-4">
         <h1 className="font-semibold">BrainBytes</h1>
         <div className="flex items-center gap-2">
-          <img
-            src={
-              session.user.image ??
-              "https://avatar.vercel.sh/" + session.user.email
-            }
-            alt={session.user.name + "'s avatar"}
-            className="h-6 w-6 rounded-full"
-          />
-          <span className="text-sm text-muted-foreground">
-            {session.user.name}
-          </span>
+          <Link href="/">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:text-foreground cursor-pointer"
+            >
+              <Home className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Home</span>
+            </Button>
+          </Link>
+          <Link href="/profile">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:text-foreground cursor-pointer"
+            >
+              <img
+                src={
+                  session.user.image ??
+                  "https://avatar.vercel.sh/" + session.user.email
+                }
+                alt={session.user.name + "'s avatar"}
+                className="h-6 w-6 rounded-full"
+              />
+              <span className="hidden sm:inline">{session.user.name}</span>
+            </Button>
+          </Link>
+          <LearningMaterialsSidebar />
         </div>
       </div>
 

@@ -4,8 +4,15 @@ import { openai } from "@ai-sdk/openai";
 import type { AuthType } from "../lib/auth";
 import type { CoreMessage } from "ai";
 import { stream } from "hono/streaming";
+import { Session, User } from "better-auth/types";
 
-const router = new Hono<{ Bindings: AuthType }>({
+const router = new Hono<{
+  Bindings: AuthType;
+  Variables: {
+    user: User | null;
+    session: Session | null;
+  };
+}>({
   strict: false,
 });
 

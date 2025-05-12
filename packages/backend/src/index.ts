@@ -3,6 +3,7 @@ import { cors } from "hono/cors";
 import type { AuthType } from "./lib/auth";
 import authRouter from "./routes/auth";
 import chatRouter from "./routes/chat";
+import materialRouter from "./routes/material";
 import { auth } from "./lib/auth";
 import { User } from "better-auth/types";
 import { Session } from "better-auth/types";
@@ -22,7 +23,7 @@ app.use(
   cors({
     origin: "http://localhost:3000",
     allowHeaders: ["Content-Type", "Authorization"],
-    allowMethods: ["POST", "GET", "OPTIONS"],
+    allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"],
     exposeHeaders: ["Content-Length", "X-Vercel-AI-Data-Stream"],
     maxAge: 600,
     credentials: true,
@@ -44,10 +45,9 @@ app.use("*", async (c, next) => {
   return next();
 });
 
-const routes = [authRouter, chatRouter] as const;
-
-routes.forEach((route) => {
-  app.basePath("/api").route("/", route);
+const routes = [authRouter, chatRouter, materialRouter] as const;
+routes.forEach((route: (typeof routes)[number]) => {
+  app.route("/api", route as any);
 });
 
 app.get("/", (c) => {
