@@ -143,14 +143,19 @@ To spin up frontend, backend, and Postgres containers:
 docker compose up --watch --build
 ```
 
----
-
 ### 5. Database Setup Using Drizzle
 
 Open a **new terminal**, navigate to the backend directory:
 
 ```bash
 cd packages/backend
+```
+
+For **first-time setup**, generate schema files and push them to the database:
+
+```bash
+docker-compose exec backend bunx drizzle-kit generate
+docker-compose exec backend bunx drizzle-kit push
 ```
 
 To open the **Drizzle Studio** GUI:
@@ -178,13 +183,15 @@ docker-compose exec backend bunx drizzle-kit migrate
 
 ### 🔁 Common Commands Summary
 
-| Task                    | Command                                                |
-| ----------------------- | ------------------------------------------------------ |
-| Install packages        | `bun install`                                          |
-| Start local dev env     | `docker compose up --watch --build`                    |
-| View database (Drizzle) | `docker-compose exec backend bunx drizzle-kit studio`  |
-| Run DB migration        | `docker-compose exec backend bunx drizzle-kit migrate` |
-| Stop all services       | `docker compose down`                                  |
+| Task                    | Command                                                 |
+| ----------------------- | ------------------------------------------------------- |
+| Install packages        | `bun install`                                           |
+| Start local dev env     | `docker compose up --watch --build`                     |
+| Generate DB schema      | `docker-compose exec backend bunx drizzle-kit generate` |
+| Push schema to DB       | `docker-compose exec backend bunx drizzle-kit push`     |
+| View database (Drizzle) | `docker-compose exec backend bunx drizzle-kit studio`   |
+| Run DB migration        | `docker-compose exec backend bunx drizzle-kit migrate`  |
+| Stop all services       | `docker compose down`                                   |
 
 ---
 
