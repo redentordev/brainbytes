@@ -34,6 +34,10 @@ The system follows a microservices-ready monorepo pattern using Bun and Node.js.
 - **Infrastructure**: Managed via SST or Pulumi
 - **Monitoring**: Prometheus and Grafana
 
+![System Architecture](docs/architecture.png)
+
+![CI/CD Pipeline Architecture](docs/ci-cd-architecture.png)
+
 ---
 
 ## 🛠️ Technology Stack

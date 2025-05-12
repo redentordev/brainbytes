@@ -14,14 +14,12 @@ const router = new Hono<{
   strict: false,
 });
 
-// Middleware to check authentication
 const requireAuth = async (c: any, next: any) => {
   const session = c.get("session");
   if (!session) return c.json({ error: "Unauthorized" }, 401);
   await next();
 };
 
-// Materials routes
 router.get("/materials", requireAuth, async (c) => {
   try {
     const user = c.get("user");
@@ -29,7 +27,6 @@ router.get("/materials", requireAuth, async (c) => {
       return c.json({ error: "User not found" }, 401);
     }
 
-    // Get materials with text entries for this user in one efficient query
     const materials = await materialRepo.getAllMaterialsWithTextEntriesByUserId(
       user.id
     );
@@ -75,7 +72,6 @@ router.post("/materials", requireAuth, async (c) => {
 
     const data = await c.req.json();
 
-    // Basic validation
     if (!data.title) {
       return c.json({ error: "Title is required" }, 400);
     }
@@ -83,7 +79,6 @@ router.post("/materials", requireAuth, async (c) => {
       return c.json({ error: "Subject is required" }, 400);
     }
 
-    // Add userId to the material data
     const materialData: NewMaterial = {
       ...data,
       userId: user.id,
@@ -108,7 +103,6 @@ router.put("/materials/:id", requireAuth, async (c) => {
 
     const data = await c.req.json();
 
-    // Basic validation
     if (data.title === "") {
       return c.json({ error: "Title cannot be empty" }, 400);
     }
@@ -116,12 +110,10 @@ router.put("/materials/:id", requireAuth, async (c) => {
       return c.json({ error: "Subject cannot be empty" }, 400);
     }
 
-    // If we're activating this material, deactivate all others
     if (data.isActive === true) {
       await materialRepo.deactivateAllMaterialsExcept(user.id, id);
     }
 
-    // Ensure the user owns this material
     const material = await materialRepo.updateMaterialByUser(id, user.id, data);
 
     if (!material) {
@@ -149,7 +141,6 @@ router.delete("/materials/:id", requireAuth, async (c) => {
       return c.json({ error: "User not found" }, 401);
     }
 
-    // Ensure the user owns this material before deleting
     await materialRepo.deleteMaterialByUser(id, user.id);
     return c.json({ success: true });
   } catch (error) {
@@ -158,7 +149,6 @@ router.delete("/materials/:id", requireAuth, async (c) => {
   }
 });
 
-// Text entries routes
 router.get("/materials/:materialId/entries", requireAuth, async (c) => {
   try {
     const materialId = c.req.param("materialId");
@@ -168,7 +158,6 @@ router.get("/materials/:materialId/entries", requireAuth, async (c) => {
       return c.json({ error: "User not found" }, 401);
     }
 
-    // Verify the user owns this material
     const material = await materialRepo.getMaterialByIdAndUserId(
       materialId,
       user.id
@@ -201,7 +190,6 @@ router.post("/materials/:materialId/entries", requireAuth, async (c) => {
 
     const data = await c.req.json();
 
-    // Basic validation
     if (!data.title) {
       return c.json({ error: "Title is required" }, 400);
     }
@@ -209,7 +197,6 @@ router.post("/materials/:materialId/entries", requireAuth, async (c) => {
       return c.json({ error: "Content is required" }, 400);
     }
 
-    // Check if material exists and belongs to the user
     const material = await materialRepo.getMaterialByIdAndUserId(
       materialId,
       user.id
@@ -248,7 +235,6 @@ router.put(
         return c.json({ error: "User not found" }, 401);
       }
 
-      // Verify the user owns this material
       const material = await materialRepo.getMaterialByIdAndUserId(
         materialId,
         user.id
@@ -265,7 +251,6 @@ router.put(
 
       const data = await c.req.json();
 
-      // Basic validation
       if (data.title === "") {
         return c.json({ error: "Title cannot be empty" }, 400);
       }
@@ -303,7 +288,6 @@ router.delete(
         return c.json({ error: "User not found" }, 401);
       }
 
-      // Verify the user owns this material
       const material = await materialRepo.getMaterialByIdAndUserId(
         materialId,
         user.id
@@ -327,7 +311,6 @@ router.delete(
   }
 );
 
-// Subject routes - Material subjects (string fields)
 router.get("/subjects", requireAuth, async (c) => {
   try {
     const user = c.get("user");
@@ -364,7 +347,6 @@ router.get("/materials/subject/:subject", requireAuth, async (c) => {
   }
 });
 
-// Subject table routes
 router.get("/subject-records", requireAuth, async (c) => {
   try {
     const user = c.get("user");
@@ -391,12 +373,10 @@ router.post("/subject-records", requireAuth, async (c) => {
 
     const data = await c.req.json();
 
-    // Basic validation
     if (!data.name) {
       return c.json({ error: "Subject name is required" }, 400);
     }
 
-    // Check if subject already exists for this user
     const existingSubject = await materialRepo.getSubjectRecordByName(
       data.name,
       user.id
@@ -405,7 +385,6 @@ router.post("/subject-records", requireAuth, async (c) => {
       return c.json({ error: "Subject with this name already exists" }, 400);
     }
 
-    // Add userId to the subject data
     const subjectData: NewSubject = {
       name: data.name,
       userId: user.id,
@@ -430,12 +409,10 @@ router.put("/subject-records/:id", requireAuth, async (c) => {
 
     const data = await c.req.json();
 
-    // Basic validation
     if (!data.name) {
       return c.json({ error: "Subject name is required" }, 400);
     }
 
-    // Check if subject belongs to user
     const subject = await materialRepo.getSubjectRecordById(id);
     if (!subject || subject.userId !== user.id) {
       return c.json(
@@ -446,7 +423,6 @@ router.put("/subject-records/:id", requireAuth, async (c) => {
       );
     }
 
-    // Check if new name already exists for this user
     if (data.name !== subject.name) {
       const existingSubject = await materialRepo.getSubjectRecordByName(
         data.name,
@@ -481,7 +457,6 @@ router.delete("/subject-records/:id", requireAuth, async (c) => {
       return c.json({ error: "User not found" }, 401);
     }
 
-    // Ensure the user owns this subject before deleting
     await materialRepo.deleteSubjectByUser(id, user.id);
     return c.json({ success: true });
   } catch (error) {

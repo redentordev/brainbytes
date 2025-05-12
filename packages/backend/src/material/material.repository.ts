@@ -165,7 +165,6 @@ export async function removeTextEntry(id: string): Promise<void> {
   await db.delete(materialTextEntries).where(eq(materialTextEntries.id, id));
 }
 
-// Subject operations
 export async function getMaterialsBySubject(
   subject: string
 ): Promise<Material[]> {
