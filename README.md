@@ -108,20 +108,25 @@ Using **GitHub Desktop**:
 
 ### 2. Create Environment Files
 
-Create `.env` files in the following directories:
+Create a single `.env` file in the root directory using `.env.example` as reference:
 
-#### 📁 `apps/frontend/.env`
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:3001
-```
-
-#### 📁 `packages/backend/.env`
+#### 📁 `.env.example` (Reference)
 
 ```env
-PORT=3001
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/brainbytes
+DATABASE_URL=
+BETTER_AUTH_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+OPENAI_API_KEY=
 ```
+
+Copy this example file to create your own `.env` in the project root with appropriate values:
+
+```bash
+cp .env.example .env
+```
+
+Then fill in the values in your new `.env` file.
 
 ---
 
