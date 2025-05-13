@@ -200,6 +200,51 @@ docker-compose exec backend bunx drizzle-kit migrate
 
 ---
 
+## 🤝 Contribution Guide
+
+### Branching Strategy
+
+1. Always branch from the latest `main` branch:
+
+   ```bash
+   git checkout main
+   git pull
+   git checkout -b feature/<feature-name>
+   ```
+
+2. Make your changes, commit them with descriptive messages:
+
+   ```bash
+   git add .
+   git commit -m "Add feature: description of changes"
+   ```
+
+3. Push your branch to the remote repository:
+   ```bash
+   git push -u origin feature/<feature-name>
+   ```
+
+### Commit Message Conventions
+
+Follow these prefixes for your commit messages:
+
+| Prefix        | Description                   | Example                                           |
+| ------------- | ----------------------------- | ------------------------------------------------- |
+| `add:`        | Adding new files or features  | `add: license file`                               |
+| `change:`     | Updates to existing content   | `change: update readme.md`                        |
+| `fix:`        | Bug fixes                     | `fix: docs directory`                             |
+| `remove:`     | Removing content              | `remove: docker compose version`                  |
+| `checkpoint:` | Significant milestone commits | `checkpoint: add frontend and backend ai chatbot` |
+
+### Pull Request Process
+
+1. Create a pull request against the `main` branch
+2. Request a review from at least one team member
+3. Address any feedback or requested changes
+4. Once approved, your changes will be merged into the main branch
+
+---
+
 ## 👥 Team Members
 
 | Name                | Role          | Email                       |
