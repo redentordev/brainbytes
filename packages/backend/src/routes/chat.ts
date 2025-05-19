@@ -121,8 +121,6 @@ router.post("/chat", async (c) => {
        fun jokes and interesting facts about the material context. Use emojis
        to make the response more engaging.
 
-       NOTE: ADD AS MANY EMOJIS AS YOU CAN TO MAKE THE RESPONSE MORE ENGAGING.
-
        <MaterialContext>
        ${materialContext}
        </MaterialContext>
