@@ -44,7 +44,7 @@ export const materialTextEntriesRelations = relations(
 
 export const subjects = pgTable("subjects", {
   id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").unique().notNull(),
+  name: text("name").notNull(),
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),

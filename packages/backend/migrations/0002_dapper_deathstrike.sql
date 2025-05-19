@@ -1,0 +1,1 @@
+ALTER TABLE "subjects" DROP CONSTRAINT "subjects_name_unique";
