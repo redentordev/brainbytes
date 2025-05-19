@@ -29,11 +29,11 @@ export function TextEntryItem({ entry, onRemove, onEdit }: TextEntryItemProps) {
   };
 
   return (
-    <div className="bg-white rounded border p-2">
+    <div className="bg-background rounded border p-2">
       <div className="flex items-center justify-between">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-sm font-medium hover:text-blue-600 flex-grow text-left"
+          className="text-sm font-medium hover:text-primary flex-grow text-left"
         >
           {entry.title}
         </button>
@@ -41,35 +41,41 @@ export function TextEntryItem({ entry, onRemove, onEdit }: TextEntryItemProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="h-5 w-5"
+            className="h-5 w-5 hover:text-primary cursor-pointer group"
             onClick={onEdit}
           >
-            <Edit size={12} className="text-muted-foreground" />
+            <Edit
+              size={12}
+              className="text-muted-foreground group-hover:text-primary cursor-pointer"
+            />
           </Button>
           <Button
             variant="ghost"
             size="icon"
-            className="h-5 w-5"
+            className="h-5 w-5 hover:text-destructive cursor-pointer group"
             onClick={handleRemove}
             disabled={isDeleting}
           >
             {isDeleting ? (
               <Loader2 size={12} className="animate-spin" />
             ) : (
-              <Trash2 size={12} className="text-muted-foreground" />
+              <Trash2
+                size={12}
+                className="text-muted-foreground hover:text-destructive cursor-pointer group-hover:text-destructive"
+              />
             )}
           </Button>
         </div>
       </div>
 
       {isExpanded && (
-        <div className="mt-2 text-xs text-gray-600 border-t pt-2">
+        <div className="mt-2 text-xs text-sidebar-foreground/60 border-t pt-2">
           {entry.content}
         </div>
       )}
 
       <div className="mt-1 flex justify-end">
-        <span className="text-[10px] text-gray-400">
+        <span className="text-[10px] text-sidebar-foreground/60">
           {new Date(entry.dateAdded).toLocaleDateString()}
         </span>
       </div>

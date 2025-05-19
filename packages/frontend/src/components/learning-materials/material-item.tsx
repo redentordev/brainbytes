@@ -147,7 +147,7 @@ export function MaterialItem({
         <Button
           variant="outline"
           size="sm"
-          className="text-sm w-full"
+          className="text-sm w-full hover:bg-primary/10 hover:border-primary"
           onClick={onAddTextEntry}
         >
           <FileText size={14} className="mr-2" />
