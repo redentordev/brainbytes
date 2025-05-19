@@ -126,7 +126,6 @@ export function LearningMaterialsProvider({
   const [activeMaterial, setActiveMaterial] =
     React.useState<LearningMaterial | null>(null);
 
-  // Fetch materials
   const {
     data: materials = [],
     isLoading: isMaterialsLoading,
@@ -138,10 +137,9 @@ export function LearningMaterialsProvider({
       return data.materials || [];
     },
     {
-      enabled: !!session, // Only run query when session exists
+      enabled: !!session,
       onError: (error) => {
         console.error("Failed to fetch materials:", error);
-        // Only show toast for errors other than network errors
         if (!(error instanceof TypeError && error.message.includes("fetch"))) {
           toast.error("Couldn't load materials", {
             description: "Start by creating a subject and then add materials",
@@ -149,7 +147,7 @@ export function LearningMaterialsProvider({
         }
       },
       retry: 1,
-      retryDelay: 1000,
+      retryDelay: 10000,
     }
   );
 

@@ -4,6 +4,7 @@ import type { AuthType } from "./lib/auth";
 import authRouter from "./routes/auth";
 import chatRouter from "./routes/chat";
 import materialRouter from "./routes/material";
+import threadRouter from "./routes/thread";
 import { auth } from "./lib/auth";
 import { User } from "better-auth/types";
 import { Session } from "better-auth/types";
@@ -32,7 +33,6 @@ app.use(
 
 app.use("*", async (c, next) => {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
-  console.log(session);
 
   if (!session) {
     c.set("user", null);
@@ -45,7 +45,7 @@ app.use("*", async (c, next) => {
   return next();
 });
 
-const routes = [authRouter, chatRouter, materialRouter] as const;
+const routes = [authRouter, chatRouter, materialRouter, threadRouter] as const;
 routes.forEach((route: (typeof routes)[number]) => {
   app.route("/api", route as any);
 });

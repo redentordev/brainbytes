@@ -83,7 +83,12 @@ export function SubjectManager({
           onOpenChange={setIsSubjectDialogOpen}
         >
           <DialogTrigger asChild>
-            <Button variant="outline" size="sm" disabled={!!isConnectionError}>
+            <Button
+              variant="default"
+              size="sm"
+              disabled={!!isConnectionError}
+              className="bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90"
+            >
               <Plus size={14} className="mr-1" />
               Add Subject
             </Button>
@@ -142,8 +147,8 @@ export function SubjectManager({
               className={cn(
                 "px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 border",
                 selectedSubjectFilter === subject
-                  ? "bg-blue-100 text-blue-700 border-blue-200"
-                  : "bg-gray-100 text-gray-700 border-gray-200"
+                  ? "bg-primary text-sidebar-primary-foreground border-sidebar-primary"
+                  : "bg-sidebar-background text-sidebar-foreground border-sidebar-border"
               )}
             >
               <button
@@ -157,23 +162,20 @@ export function SubjectManager({
                 <Tag size={12} />
                 {subject}
               </button>
-              <button
-                onClick={() => handleRemoveSubject(subject)}
-                className="ml-1 text-gray-500 hover:text-red-500"
-              >
+              <button onClick={() => handleRemoveSubject(subject)}>
                 <Trash2 size={12} />
               </button>
             </div>
           ))
         ) : (
-          <div className="text-sm text-muted-foreground p-2 bg-gray-50 rounded-md w-full text-center">
+          <div className="text-sm text-sidebar-foreground/60 p-2 bg-sidebar-background rounded-md w-full text-center">
             No subjects yet. Add your first subject to get started.
           </div>
         )}
         {selectedSubjectFilter && (
           <button
             onClick={() => setSelectedSubjectFilter(null)}
-            className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200"
+            className="px-2 py-1 rounded-full text-xs font-medium bg-sidebar-background text-sidebar-foreground border border-border"
           >
             Clear Filter
           </button>

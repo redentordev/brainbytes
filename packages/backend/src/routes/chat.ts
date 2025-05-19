@@ -1,11 +1,20 @@
 import { Hono } from "hono";
-import { streamText } from "ai";
+import { generateText, streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
 import type { AuthType } from "../lib/auth";
 import type { CoreMessage } from "ai";
 import { stream } from "hono/streaming";
 import { Session, User } from "better-auth/types";
 import * as materialRepo from "../material/material.repository";
+import { zValidator } from "@hono/zod-validator";
+import { z } from "zod";
+import {
+  createThread,
+  getMessagesByThreadId,
+  getThreadById,
+  saveMessages,
+  updateThreadTitle,
+} from "../thread/thread.repository";
 
 const router = new Hono<{
   Bindings: AuthType;
@@ -27,7 +36,26 @@ router.post("/chat", async (c) => {
       return c.json({ error: "User not found" }, 401);
     }
 
-    const { messages }: { messages: CoreMessage[] } = await c.req.json();
+    const { messages, id }: { messages: CoreMessage[]; id: string } =
+      await c.req.json();
+
+    if (messages.length === 1) {
+      const { text } = await generateText({
+        model: openai("gpt-4.1-mini"),
+        system: `You are BrainBytes AI, a chatbot designed to help students with their questions. 
+        Generate a title for the conversation based on the user's input.
+        The title should be a single sentence that captures the main idea of the conversation.
+        The title should be no more than 50 characters.
+        The input is not a question or anything, view it in an objective angle and describe it as 
+        a title for the conversation.
+        `,
+        messages: [{ role: "user", content: messages[0].content as string }],
+      });
+
+      await updateThreadTitle(id, text);
+    }
+
+    await saveMessages(id, messages);
 
     const activeMaterial =
       await materialRepo.getActiveMaterialWithTextEntriesByUserId(user.id);
@@ -80,6 +108,21 @@ router.post("/chat", async (c) => {
        immediately do the question and answer routine, true or false questions, and fill in the blank questions and
        other simple but engaging activities that will help the user learn.
 
+       Strictly follow the material context. Only ask the user 1 by 1 on the material context. Do 
+       a step by step teaching on the material context.
+
+       Ask the user how confident they are about the material context. If they are not confident,
+       review them on the material context. If they are confident, then move on to the next step.
+
+       Lastly the formatting of your response should be as follows:
+       Strictly use Markdown formatting.
+
+       Your tone should be fun, engaging, and friendly. Try to insert
+       fun jokes and interesting facts about the material context. Use emojis
+       to make the response more engaging.
+
+       NOTE: ADD AS MANY EMOJIS AS YOU CAN TO MAKE THE RESPONSE MORE ENGAGING.
+
        <MaterialContext>
        ${materialContext}
        </MaterialContext>
@@ -96,5 +139,120 @@ router.post("/chat", async (c) => {
     return c.json({ error: "Failed to process chat request" }, 500);
   }
 });
+
+router.post("/new-chat", async (c) => {
+  const session = c.get("session");
+  if (!session) return c.json({ error: "Unauthorized" }, 401);
+
+  const user = c.get("user");
+  if (!user || !user.id) return c.json({ error: "User not found" }, 401);
+
+  try {
+    console.log("Creating new chat thread for user:", user.id);
+
+    // Get the active material if any
+    const activeMaterial =
+      await materialRepo.getActiveMaterialWithTextEntriesByUserId(user.id);
+
+    // Generate a default title based on time
+    const defaultTitle = `New Chat - ${new Date().toLocaleString()}`;
+
+    console.log("About to create thread with params:", {
+      userId: user.id,
+      title: defaultTitle,
+      materialId: activeMaterial?.id || null,
+    });
+
+    // Create the thread with the generated title and material if available
+    const thread = await createThread(
+      user.id,
+      defaultTitle,
+      activeMaterial?.id
+    );
+
+    console.log("Thread created successfully:", thread.id);
+    return c.json({ threadId: thread.id });
+  } catch (error) {
+    console.error("Error creating new chat:", error);
+    return c.json(
+      {
+        error: "Failed to create new chat thread",
+        details: error instanceof Error ? error.message : String(error),
+      },
+      500
+    );
+  }
+});
+
+router.get("/chat/:threadId", async (c) => {
+  const session = c.get("session");
+  if (!session) return c.json({ error: "Unauthorized" }, 401);
+
+  const user = c.get("user");
+  if (!user || !user.id) return c.json({ error: "User not found" }, 401);
+
+  const { threadId } = c.req.param();
+
+  const thread = await getThreadById(threadId);
+
+  if (!thread) return c.json({ error: "Thread not found" }, 404);
+
+  const messages = await getMessagesByThreadId(threadId);
+
+  return c.json({ messages });
+});
+
+router.post("/chat/:threadId", async (c) => {
+  const session = c.get("session");
+  if (!session) return c.json({ error: "Unauthorized" }, 401);
+
+  const user = c.get("user");
+  if (!user || !user.id) return c.json({ error: "User not found" }, 401);
+
+  const { threadId } = c.req.param();
+  const { messages } = await c.req.json();
+
+  await saveMessages(threadId, messages);
+
+  return c.json({ success: true });
+});
+
+router.post(
+  "/generate-title",
+  zValidator(
+    "json",
+    z.object({
+      userInput: z.string(),
+    })
+  ),
+  async (c) => {
+    const session = c.get("session");
+    if (!session) return c.json({ error: "Unauthorized" }, 401);
+
+    try {
+      const user = c.get("user");
+      if (!user || !user.id) {
+        return c.json({ error: "User not found" }, 401);
+      }
+
+      const { userInput } = await c.req.json();
+
+      const { text } = await generateText({
+        model: openai("gpt-4.1-mini"),
+        system: `You are BrainBytes AI, a chatbot designed to help students with their questions. 
+        Generate a title for the conversation based on the user's input.
+        The title should be a single sentence that captures the main idea of the conversation.
+        The title should be no more than 50 characters.
+        `,
+        messages: [{ role: "user", content: userInput }],
+      });
+
+      return c.json({ text });
+    } catch (error) {
+      console.error("Generate title error:", error);
+      return c.json({ error: "Failed to generate title" }, 500);
+    }
+  }
+);
 
 export default router;

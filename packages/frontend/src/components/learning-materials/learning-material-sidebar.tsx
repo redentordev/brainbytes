@@ -15,23 +15,19 @@ import {
   ChevronRight,
   Loader2,
   AlertTriangle,
-  RefreshCw,
 } from "lucide-react";
 import { useLearningMaterials } from "@/contexts/learning-material-context";
 import { cn } from "@/lib/utils";
 import { useQueryClient } from "react-query";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-import { ConnectionError } from "./learning-materials/connection-error";
-import { SubjectManager } from "./learning-materials/subject-manager";
-import { MaterialItem } from "./learning-materials/material-item";
-import { AddMaterialDialog } from "./learning-materials/add-material-dialog";
-import { AddTextEntryDialog } from "./learning-materials/add-text-entry-dialog";
-import { AuthError } from "./learning-materials/auth-error";
-import { useSession } from "@/lib/auth";
+import { SubjectManager } from "./subject-manager";
+import { MaterialItem } from "./material-item";
+import { AddMaterialDialog } from "./add-material-dialog";
+import { AddTextEntryDialog } from "./add-text-entry-dialog";
+import { AuthError } from "./auth-error";
 
 export function LearningMaterialsSidebar() {
-  const queryClient = useQueryClient();
   const {
     materials,
     activeMaterial,
@@ -57,7 +53,6 @@ export function LearningMaterialsSidebar() {
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<
     string | null
   >(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const isConnectionError =
     error &&
@@ -74,23 +69,6 @@ export function LearningMaterialsSidebar() {
   const activeContextMaterial = materials.find((material) => material.isActive);
 
   const currentActiveMaterial = activeMaterial || activeContextMaterial;
-
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    try {
-      await queryClient.invalidateQueries(["materials"]);
-      await queryClient.invalidateQueries(["subjects"]);
-      toast.success("Data refreshed", {
-        description: "Your learning materials have been refreshed.",
-      });
-    } catch (error) {
-      toast.error("Refresh failed", {
-        description: "Failed to refresh data. Please try again.",
-      });
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
 
   const handleLogin = () => {
     window.location.href = "/";
@@ -112,47 +90,35 @@ export function LearningMaterialsSidebar() {
             className={cn(
               "flex items-center gap-1 mr-2",
               currentActiveMaterial &&
-                "bg-blue-50 text-blue-600 border-blue-200"
+                "bg-primary/10 text-primary border-primary/20"
             )}
           >
             <Book size={16} />
             <span className="hidden sm:inline">Materials</span>
             {currentActiveMaterial && (
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-[10px] text-blue-600 ml-1">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-[10px] text-primary ml-1">
                 1
               </span>
             )}
             <ChevronRight size={14} />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+        <SheetContent
+          side="left"
+          className="w-[300px] sm:w-[400px] bg-sidebar text-sidebar-foreground"
+        >
           <SheetHeader>
             <div className="flex items-center justify-between">
-              <SheetTitle className="flex items-center">
+              <SheetTitle className="flex items-center text-sidebar-foreground">
                 <BookOpen className="mr-2" size={20} />
                 Learning Materials
               </SheetTitle>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleRefresh}
-                disabled={isRefreshing}
-                className="h-8 w-8"
-              >
-                <RefreshCw
-                  size={16}
-                  className={cn(
-                    "text-muted-foreground",
-                    isRefreshing && "animate-spin"
-                  )}
-                />
-              </Button>
             </div>
           </SheetHeader>
 
           <div className="mt-6 flex flex-col gap-4 px-4">
             {isConnectionError ? (
-              <ConnectionError onRetry={handleRefresh} />
+              <> </>
             ) : isAuthError ? (
               <AuthError onLogin={handleLogin} />
             ) : error && !isConnectionError && !isAuthError ? (
@@ -166,7 +132,6 @@ export function LearningMaterialsSidebar() {
               </Alert>
             ) : null}
 
-            {/* Subject Management Section */}
             <SubjectManager
               subjects={subjects}
               selectedSubjectFilter={selectedSubjectFilter}
@@ -177,9 +142,8 @@ export function LearningMaterialsSidebar() {
               isConnectionError={!!isConnectionError}
             />
 
-            {/* Add Material Button */}
             <Button
-              className="w-full"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
               onClick={() => setIsAddDialogOpen(true)}
               disabled={!hasSubjects || !!isConnectionError}
             >
@@ -187,18 +151,17 @@ export function LearningMaterialsSidebar() {
               Add New Material
             </Button>
 
-            <div className="h-px bg-border" />
+            <div className="h-px bg-sidebar-border" />
 
-            {/* Materials List */}
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin mb-2" />
-                <p className="text-sm text-muted-foreground">
+                <Loader2 className="h-8 w-8 animate-spin mb-2 text-foreground" />
+                <p className="text-sm text-foreground/60">
                   Loading materials...
                 </p>
               </div>
             ) : filteredMaterials.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
+              <div className="flex flex-col items-center justify-center py-8 text-center text-sidebar-foreground/60">
                 <BookOpen
                   size={40}
                   strokeWidth={1}

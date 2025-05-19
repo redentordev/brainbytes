@@ -43,7 +43,6 @@ export function MaterialItem({
   removeTextEntry,
   updateTextEntry,
 }: MaterialItemProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [showTextEntries, setShowTextEntries] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditMaterialDialogOpen, setIsEditMaterialDialogOpen] =
@@ -92,7 +91,7 @@ export function MaterialItem({
     <div
       className={cn(
         "rounded-lg border p-3 transition-all",
-        material.isActive && "border-blue-200 bg-blue-50"
+        material.isActive && "border-primary bg-primary/20"
       )}
     >
       <div className="flex items-center justify-between">
@@ -123,17 +122,17 @@ export function MaterialItem({
       </div>
       {material.subject && (
         <div className="mt-1 flex items-center">
-          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full flex items-center">
+          <span className="text-xs bg-sidebar-background text-sidebar-foreground px-2 py-0.5 rounded-full flex items-center">
             <Tag size={10} className="mr-1" />
             {material.subject}
           </span>
         </div>
       )}
-      <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+      <p className="mt-1 line-clamp-2 text-xs text-sidebar-foreground/60">
         {material.description}
       </p>
       <div className="mt-3 flex items-center justify-between">
-        <span className="text-xs text-muted-foreground">
+        <span className="text-xs text-sidebar-foreground/60">
           {new Date(material.dateAdded).toLocaleDateString()}
         </span>
         <div className="flex items-center gap-2">
@@ -172,7 +171,7 @@ export function MaterialItem({
           </div>
 
           {showTextEntries && (
-            <div className="mt-2 space-y-2 max-h-60 overflow-y-auto p-2 bg-gray-50 rounded-md">
+            <div className="mt-2 space-y-2 max-h-60 overflow-y-auto p-2 bg-sidebar-background rounded-md">
               {material.textEntries.map((entry) => (
                 <TextEntryItem
                   key={entry.id}
@@ -185,7 +184,7 @@ export function MaterialItem({
           )}
         </div>
       ) : (
-        <div className="mt-3 text-xs text-gray-500 p-2 bg-gray-50 rounded-md text-center">
+        <div className="mt-3 text-xs text-sidebar-foreground/60 p-2 bg-sidebar-background rounded-md text-center">
           No text entries yet. Add your first entry above.
         </div>
       )}
