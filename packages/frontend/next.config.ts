@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
       source: "/:path*",
       destination: "/static-app",
     },
+    {
+      source: "/",
+      destination: "/static-app",
+    },
   ],
 };
 
