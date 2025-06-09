@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FileText, Loader2, Tag, Trash2, Edit, PenSquare } from "lucide-react";
+import { FileText, Loader2, Tag, Trash2, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
@@ -75,7 +75,7 @@ export function MaterialItem({
       toast.success("Material removed", {
         description: "The learning material has been removed.",
       });
-    } catch (error) {
+    } catch {
       // Error is already handled in the context
     } finally {
       setIsDeleting(false);

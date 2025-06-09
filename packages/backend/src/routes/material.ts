@@ -1,4 +1,4 @@
-import { Hono } from "hono";
+import { Hono, Context } from "hono";
 import type { AuthType } from "../lib/auth";
 import * as materialRepo from "../material/material.repository";
 import { NewMaterial, NewMaterialTextEntry, NewSubject } from "../material";
@@ -14,7 +14,7 @@ const router = new Hono<{
   strict: false,
 });
 
-const requireAuth = async (c: any, next: any) => {
+const requireAuth = async (c: Context, next: () => Promise<void>) => {
   const session = c.get("session");
   if (!session) return c.json({ error: "Unauthorized" }, 401);
   await next();

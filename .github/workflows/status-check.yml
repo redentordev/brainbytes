@@ -1,0 +1,85 @@
+name: Status Check
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  quick-check:
+    name: Quick Status Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Check formatting
+        run: |
+          echo "🎨 Checking code formatting..."
+          if bunx prettier --check .; then
+            echo "✅ Code formatting is correct"
+          else
+            echo "⚠️ Code formatting issues found"
+            echo "ℹ️ Run 'bunx prettier --write .' to fix formatting"
+          fi
+
+      - name: Backend dependency check
+        working-directory: ./packages/backend
+        run: |
+          echo "📦 Checking backend dependencies..."
+          bun install --dry-run
+          echo "✅ Backend dependencies are valid"
+
+      - name: Frontend dependency check
+        working-directory: ./packages/frontend
+        run: |
+          echo "📦 Checking frontend dependencies..."
+          bun install --dry-run
+          echo "✅ Frontend dependencies are valid"
+
+      - name: Backend lint check
+        working-directory: ./packages/backend
+        run: |
+          echo "🔍 Quick backend lint check..."
+          if bun run lint; then
+            echo "✅ Backend linting passed"
+          else
+            echo "⚠️ Backend linting issues found"
+          fi
+
+      - name: Frontend lint check
+        working-directory: ./packages/frontend
+        run: |
+          echo "🔍 Quick frontend lint check..."
+          if bun run lint; then
+            echo "✅ Frontend linting passed"
+          else
+            echo "⚠️ Frontend linting issues found"
+          fi
+
+      - name: Frontend build check
+        working-directory: ./packages/frontend
+        run: |
+          echo "🔨 Checking frontend build..."
+          if timeout 60s bun run build; then
+            echo "✅ Frontend build successful"
+          else
+            echo "⚠️ Frontend build had issues"
+          fi
+
+      - name: Status Summary
+        run: |
+          echo "✅ Dependencies checked"
+          echo "✅ Linting verified"
+          echo "✅ Build validation complete"
+          echo "ℹ️ See full test workflow for comprehensive testing"

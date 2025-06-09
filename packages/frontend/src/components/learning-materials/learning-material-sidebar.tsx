@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -7,7 +7,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import {
   Book,
   Plus,
@@ -18,7 +17,6 @@ import {
 } from "lucide-react";
 import { useLearningMaterials } from "@/contexts/learning-material-context";
 import { cn } from "@/lib/utils";
-import { useQueryClient } from "react-query";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import { SubjectManager } from "./subject-manager";
