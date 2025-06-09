@@ -67,6 +67,12 @@ Our testing strategy follows a comprehensive approach covering multiple layers o
 
 ## 📊 Test Results Output
 
+### GitHub Actions CI/CD Results
+
+![GitHub Actions Test Results](../github-actions-result.png)
+
+_All checks have passed successfully: Backend Tests (35s), Frontend Tests (53s), Lint and Format Check (16s), Integration Tests (1m), and Status Check (51s)_
+
 ### Backend Test Results
 
 ```bash
@@ -505,5 +511,5 @@ For questions about testing or to report issues:
 3. Contact the development team
 4. Create an issue in the project repository
 
-**Last Updated**: December 2024  
+**Last Updated**: June 09, 2025
 **Version**: 1.0.0
