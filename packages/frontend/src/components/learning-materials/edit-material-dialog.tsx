@@ -78,7 +78,7 @@ export function EditMaterialDialog({
       toast.success("Material updated", {
         description: "Your learning material has been updated successfully.",
       });
-    } catch (error) {
+    } catch {
       // Error is already handled in the context
     } finally {
       setIsSubmitting(false);

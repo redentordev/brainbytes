@@ -47,12 +47,16 @@ app.use("*", async (c, next) => {
 
 const routes = [authRouter, chatRouter, materialRouter, threadRouter] as const;
 routes.forEach((route: (typeof routes)[number]) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   app.route("/api", route as any);
 });
 
 app.get("/", (c) => {
   return c.json({ message: "version 0.0.1" });
 });
+
+// Export the app instance for testing
+export { app };
 
 export default {
   port: 3001,

@@ -1,0 +1,23 @@
+# Ignore build artifacts and generated files
+.next
+**/.next/**
+node_modules
+**/node_modules/**
+build
+**/build/**
+dist
+**/dist/**
+coverage
+**/coverage/**
+
+# Ignore lock files
+**/package-lock.json
+**/yarn.lock
+**/bun.lock
+
+# Ignore environment files
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local 

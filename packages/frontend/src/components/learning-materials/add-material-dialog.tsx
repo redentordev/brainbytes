@@ -70,7 +70,7 @@ export function AddMaterialDialog({
       toast.success("Material added", {
         description: "Your learning material has been added successfully.",
       });
-    } catch (error) {
+    } catch {
       // Error is already handled in the context
     } finally {
       setIsSubmitting(false);

@@ -23,7 +23,20 @@
     "prepare": "husky",
     "dev": "concurrently \"bun run dev:backend\" \"bun run dev:frontend\"",
     "dev:frontend": "bun run --cwd packages/frontend dev",
-    "dev:backend": "bun run --cwd packages/backend dev"
+    "dev:backend": "bun run --cwd packages/backend dev",
+    "test": "concurrently \"bun run test:backend\" \"bun run test:frontend\"",
+    "test:backend": "bun run --cwd packages/backend test",
+    "test:frontend": "bun run --cwd packages/frontend test",
+    "test:watch": "concurrently \"bun run test:backend:watch\" \"bun run test:frontend:watch\"",
+    "test:backend:watch": "bun run --cwd packages/backend test:watch",
+    "test:frontend:watch": "bun run --cwd packages/frontend test --watch",
+    "build": "concurrently \"bun run build:backend\" \"bun run build:frontend\"",
+    "build:backend": "echo 'Backend build not needed for Bun runtime'",
+    "build:frontend": "bun run --cwd packages/frontend build",
+    "lint": "concurrently \"bun run lint:frontend\" \"bun run lint:backend\" \"bunx prettier --check .\"",
+    "lint:frontend": "bun run --cwd packages/frontend lint",
+    "lint:backend": "bun run --cwd packages/backend lint",
+    "format": "bunx prettier --write ."
   },
   "dependencies": {
     "immer": "^10.1.1"

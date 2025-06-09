@@ -100,7 +100,7 @@ const fetchWithErrorHandling = async (url: string, options?: RequestInit) => {
       try {
         const errorData = await response.json();
         throw new Error(errorData.error || `Server error: ${response.status}`);
-      } catch (e) {
+      } catch {
         throw new Error(`Server error: ${response.status}`);
       }
     }
@@ -122,7 +122,7 @@ export function LearningMaterialsProvider({
   children: React.ReactNode;
 }) {
   const queryClient = useQueryClient();
-  const { isPending, data: session } = useSession();
+  const { data: session } = useSession();
   const [activeMaterial, setActiveMaterial] =
     React.useState<LearningMaterial | null>(null);
 
@@ -560,10 +560,6 @@ export function LearningMaterialsProvider({
       // If this material is already active and we're turning it off
       if (material.isActive) {
         // Update local state
-        const updatedMaterial = {
-          ...material,
-          isActive: false,
-        };
         setActiveMaterial(null);
 
         // Update the active status in the database

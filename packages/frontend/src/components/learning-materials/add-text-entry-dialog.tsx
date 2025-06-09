@@ -60,7 +60,7 @@ export function AddTextEntryDialog({
       toast.success("Text entry added", {
         description: "Your text entry has been added to the material.",
       });
-    } catch (error) {
+    } catch {
       // Error is already handled in the context
     } finally {
       setIsSubmitting(false);

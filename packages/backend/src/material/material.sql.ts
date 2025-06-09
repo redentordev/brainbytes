@@ -50,7 +50,7 @@ export const subjects = pgTable("subjects", {
     .references(() => user.id, { onDelete: "cascade" }),
 });
 
-export const subjectsRelations = relations(subjects, ({ many, one }) => ({
+export const subjectsRelations = relations(subjects, ({ one }) => ({
   user: one(user, {
     fields: [subjects.userId],
     references: [user.id],

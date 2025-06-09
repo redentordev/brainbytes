@@ -53,7 +53,7 @@ export function SubjectManager({
       toast.success("Subject added", {
         description: "Your subject has been added successfully.",
       });
-    } catch (error) {
+    } catch {
       // Error is already handled in the context
     } finally {
       setIsSubmitting(false);
@@ -66,7 +66,7 @@ export function SubjectManager({
       toast.success("Subject removed", {
         description: "The subject has been removed.",
       });
-    } catch (error) {
+    } catch {
       // Error is already handled in the context
     }
   };

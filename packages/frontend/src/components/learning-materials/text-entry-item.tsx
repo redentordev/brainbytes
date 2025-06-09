@@ -21,7 +21,7 @@ export function TextEntryItem({ entry, onRemove, onEdit }: TextEntryItemProps) {
       toast.success("Entry removed", {
         description: "Text entry has been removed.",
       });
-    } catch (error) {
+    } catch {
       // Error is already handled in the context
     } finally {
       setIsDeleting(false);

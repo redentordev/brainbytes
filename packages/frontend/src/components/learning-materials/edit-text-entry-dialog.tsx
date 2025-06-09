@@ -70,7 +70,7 @@ export function EditTextEntryDialog({
       toast.success("Text entry updated", {
         description: "Your text entry has been updated successfully.",
       });
-    } catch (error) {
+    } catch {
       // Error is already handled in the context
     } finally {
       setIsSubmitting(false);
