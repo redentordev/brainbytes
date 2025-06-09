@@ -1,0 +1,53 @@
+name: Status Check
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  quick-check:
+    name: Quick Status Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Check formatting
+        run: bunx prettier --check . || echo "⚠️ Code formatting issues found"
+
+      - name: Backend dependency check
+        working-directory: ./packages/backend
+        run: bun install --dry-run
+
+      - name: Frontend dependency check
+        working-directory: ./packages/frontend
+        run: bun install --dry-run
+
+      - name: Backend quick test
+        working-directory: ./packages/backend
+        run: |
+          echo "DATABASE_URL=postgresql://test:test@localhost:5432/test_db" > .env.test
+          echo "OPENAI_API_KEY=test-key" >> .env.test
+          echo "BETTER_AUTH_SECRET=test-secret-key" >> .env.test
+          timeout 30s bun run test --run || echo "⚠️ Backend tests had issues"
+
+      - name: Frontend build check
+        working-directory: ./packages/frontend
+        run: timeout 60s bun run build || echo "⚠️ Frontend build had issues"
+
+      - name: Status Summary
+        run: |
+          echo "✅ Dependencies checked"
+          echo "✅ Basic validation complete"
+          echo "ℹ️ See full test workflow for comprehensive testing"

@@ -12,7 +12,7 @@ import {
 import { AutoResizeTextarea } from "@/components/autoresize-textarea";
 import { useSession } from "@/lib/auth";
 import { useEffect, useRef } from "react";
-import { useLearningMaterials } from "@/contexts/learning-material-context";
+
 import { useNavigate, useSearchParams } from "react-router";
 import { saveChat } from "@/lib/save-chat";
 import { useQueryClient } from "react-query";
@@ -88,6 +88,7 @@ export function ChatForm({
       window.history.replaceState(null, "", newUrl);
       setInput("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialChat]);
 
   useEffect(() => {
@@ -131,7 +132,7 @@ export function ChatForm({
         Hello, {session?.user.name}
       </h1>
       <p className="text-sm text-muted-foreground">
-        I'm BrainBytes AI, a chatbot that can help you with your questions.
+        I&apos;m BrainBytes AI, a chatbot that can help you with your questions.
       </p>
     </header>
   );

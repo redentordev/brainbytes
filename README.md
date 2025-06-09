@@ -2,7 +2,7 @@
 
 BrainBytes is an **AI-powered tutoring platform** developed to make academic help more accessible for Filipino students. This project focuses on the deployment infrastructure using modern **DevOps practices**, containerization, automation, and cloud services.
 
----
+![Tests](https://github.com/your-username/your-repo/actions/workflows/test.yml/badge.svg)
 
 ## 📌 Table of Contents
 
@@ -16,13 +16,9 @@ BrainBytes is an **AI-powered tutoring platform** developed to make academic hel
 8. [Team Members](#team-members)
 9. [License](#license)
 
----
-
 ## 🧩 Project Overview
 
 BrainBytes is designed to streamline academic support using AI technologies. This project implements the backend and frontend application layers, infrastructure, automation pipelines, and cloud deployment architecture.
-
----
 
 ## 🏗️ System Architecture
 
@@ -39,8 +35,6 @@ The system follows a microservices-ready monorepo pattern using Bun and Node.js.
 
 ![CI/CD Pipeline Architecture](docs/ci-cd-architecture.png)
 
----
-
 ## 🛠️ Technology Stack
 
 | Component            | Tool/Framework           |
@@ -56,8 +50,6 @@ The system follows a microservices-ready monorepo pattern using Bun and Node.js.
 | **Monitoring**       | Prometheus + Grafana     |
 | **Cloud Provider**   | AWS                      |
 
----
-
 ## 🔁 CI/CD Pipeline
 
 GitHub Actions is used to automate testing, containerization, and deployment. The workflow:
@@ -66,8 +58,6 @@ GitHub Actions is used to automate testing, containerization, and deployment. Th
 2. **Test**: Run backend and frontend unit/integration tests
 3. **Deploy**: Push Docker image to AWS ECR, trigger ECS deployment via Pulumi or SST
 
----
-
 ## 📈 Monitoring & Observability
 
 | Tool           | Purpose                                |
@@ -75,8 +65,6 @@ GitHub Actions is used to automate testing, containerization, and deployment. Th
 | **Prometheus** | Collects backend/API/container metrics |
 | **Grafana**    | Visualizes logs, metrics, alerts       |
 | **CloudWatch** | Stores ECS logs and cloud events       |
-
----
 
 ## 💻 Project Setup (Local)
 
@@ -91,8 +79,6 @@ Ensure the following are installed:
 - [Docker](https://www.docker.com/products/docker-desktop)
 - [Node.js](https://nodejs.org/en) (if needed)
 
----
-
 ### 1. Clone the Repository
 
 Using **GitHub Desktop**:
@@ -103,8 +89,6 @@ Using **GitHub Desktop**:
    https://github.com/redentordev/devops.git
    ```
 3. Choose a local path and click **Clone**.
-
----
 
 ### 2. Create Environment Files
 
@@ -128,8 +112,6 @@ cp .env.example .env
 
 Then fill in the values in your new `.env` file.
 
----
-
 ### 3. Install Dependencies
 
 From the root of the project, run:
@@ -137,8 +119,6 @@ From the root of the project, run:
 ```bash
 bun install
 ```
-
----
 
 ### 4. Run the App with Docker
 
@@ -175,8 +155,6 @@ To apply migrations instead:
 docker-compose exec backend bunx drizzle-kit migrate
 ```
 
----
-
 ### 6. Access the App
 
 | Service         | URL                   |
@@ -184,7 +162,45 @@ docker-compose exec backend bunx drizzle-kit migrate
 | **Frontend**    | http://localhost:3000 |
 | **Backend API** | http://localhost:3001 |
 
----
+### 7. Testing
+
+The project includes comprehensive test suites for both frontend and backend:
+
+#### Running Tests
+
+```bash
+# Run all tests (frontend + backend)
+bun run test
+
+# Run tests in watch mode
+bun run test:watch
+
+# Run individual test suites
+bun run test:frontend   # Jest tests for Next.js frontend
+bun run test:backend    # Vitest tests for Hono backend
+```
+
+#### Test Coverage
+
+- **Backend**: API endpoint testing, authentication, request validation
+- **Frontend**: Component testing, user interactions, integration tests
+- **CI/CD**: Automated testing on every push and PR
+
+#### Test Structure
+
+```
+packages/
+├── backend/src/__tests__/
+│   ├── setup.test.ts           # Basic test environment
+│   ├── index.test.ts           # Main app and CORS tests
+│   ├── routes/                 # API route tests
+│   │   ├── auth.test.ts
+│   │   ├── chat.test.ts
+│   │   ├── thread.test.ts
+│   │   └── material.test.ts
+│   └── helpers/test-utils.ts   # Test utilities and mocks
+└── frontend/__tests__/         # Frontend test files (Jest)
+```
 
 ### 🔁 Common Commands Summary
 
@@ -192,13 +208,15 @@ docker-compose exec backend bunx drizzle-kit migrate
 | ----------------------- | ------------------------------------------------------- |
 | Install packages        | `bun install`                                           |
 | Start local dev env     | `docker compose up --watch --build`                     |
+| **Run all tests**       | `bun run test`                                          |
+| **Run tests in watch**  | `bun run test:watch`                                    |
+| **Check code quality**  | `bun run lint`                                          |
+| **Format code**         | `bun run format`                                        |
 | Generate DB schema      | `docker-compose exec backend bunx drizzle-kit generate` |
 | Push schema to DB       | `docker-compose exec backend bunx drizzle-kit push`     |
 | View database (Drizzle) | `docker-compose exec backend bunx drizzle-kit studio`   |
 | Run DB migration        | `docker-compose exec backend bunx drizzle-kit migrate`  |
 | Stop all services       | `docker compose down`                                   |
-
----
 
 ## 🤝 Contribution Guide
 
@@ -243,8 +261,6 @@ Follow these prefixes for your commit messages:
 3. Address any feedback or requested changes
 4. Once approved, your changes will be merged into the main branch
 
----
-
 ## 👥 Team Members
 
 | Name                | Role          | Email                       |
@@ -253,8 +269,6 @@ Follow these prefixes for your commit messages:
 | Abigail Galilo      | Team Member   | lr.agalilo@mmdc.mcl.edu.ph  |
 | Michael Angel Lu    | Team Member   | lr.malu@mmdc.mcl.edu.ph     |
 | Redentor Valerio    | Team Member   | lr.rvalerio@mmdc.mcl.edu.ph |
-
----
 
 ## 📜 License
 

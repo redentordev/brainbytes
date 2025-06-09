@@ -40,6 +40,7 @@ export const createAuthHeaders = (sessionToken = mockSession.token) => ({
 });
 
 // Helper for JSON request body
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const jsonBody = (data: any) => JSON.stringify(data);
 
 // Common test patterns

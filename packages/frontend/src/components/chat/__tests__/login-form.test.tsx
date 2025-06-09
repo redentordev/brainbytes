@@ -48,6 +48,7 @@ jest.mock("@/components/ui/button", () => ({
 }));
 
 describe("LoginForm", () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mockSignIn = require("@/lib/auth").signIn.social;
 
   beforeEach(() => {

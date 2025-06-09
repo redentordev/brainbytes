@@ -128,7 +128,7 @@ jest.mock("lucide-react", () => ({
 
 // Mock fetch
 const mockFetch = jest.fn();
-global.fetch = mockFetch as any;
+global.fetch = mockFetch as unknown as jest.MockedFunction<typeof fetch>;
 
 // Mock window.history
 Object.defineProperty(window, "history", {
@@ -143,8 +143,11 @@ Element.prototype.scrollIntoView = jest.fn();
 
 describe("ChatForm", () => {
   let queryClient: QueryClient;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mockUseChat = require("@ai-sdk/react").useChat;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mockUseSession = require("@/lib/auth").useSession;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mockUseNavigate = require("react-router").useNavigate;
   const mockNavigate = jest.fn();
 
