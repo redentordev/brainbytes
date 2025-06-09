@@ -12,9 +12,10 @@ BrainBytes is an **AI-powered tutoring platform** developed to make academic hel
 4. [CI/CD Pipeline](#ci-cd-pipeline)
 5. [Monitoring & Observability](#monitoring--observability)
 6. [Project Setup (Local)](#project-setup-local)
-7. [API Documentation](packages/backend/docs/api-documentation.md)
-8. [Team Members](#team-members)
-9. [License](#license)
+7. [Testing Strategy & Results](docs/testing-guide.md)
+8. [API Documentation](packages/backend/docs/api-documentation.md)
+9. [Team Members](#team-members)
+10. [License](#license)
 
 ## 🧩 Project Overview
 
@@ -164,9 +165,9 @@ docker-compose exec backend bunx drizzle-kit migrate
 
 ### 7. Testing
 
-The project includes comprehensive test suites for both frontend and backend:
+The project includes comprehensive test suites for both frontend and backend with 96.67% code coverage:
 
-#### Running Tests
+#### Quick Test Commands
 
 ```bash
 # Run all tests (frontend + backend)
@@ -180,27 +181,23 @@ bun run test:frontend   # Jest tests for Next.js frontend
 bun run test:backend    # Vitest tests for Hono backend
 ```
 
-#### Test Coverage
+#### Test Results Summary
 
-- **Backend**: API endpoint testing, authentication, request validation
-- **Frontend**: Component testing, user interactions, integration tests
-- **CI/CD**: Automated testing on every push and PR
+- **Backend**: 31 tests passing (100% success rate) - API endpoints, authentication, CORS validation
+- **Frontend**: 18 tests passing (96.67% coverage) - React components, user interactions, forms
+- **CI/CD**: Automated testing on every push and PR with GitHub Actions
 
-#### Test Structure
+#### Comprehensive Documentation
 
-```
-packages/
-├── backend/src/__tests__/
-│   ├── setup.test.ts           # Basic test environment
-│   ├── index.test.ts           # Main app and CORS tests
-│   ├── routes/                 # API route tests
-│   │   ├── auth.test.ts
-│   │   ├── chat.test.ts
-│   │   ├── thread.test.ts
-│   │   └── material.test.ts
-│   └── helpers/test-utils.ts   # Test utilities and mocks
-└── frontend/__tests__/         # Frontend test files (Jest)
-```
+For detailed testing strategy, results analysis, ESLint output, and challenges encountered, see:
+**📊 [Complete Testing Guide](docs/testing-guide.md)**
+
+This documentation includes:
+
+- Test results output and coverage metrics
+- ESLint analysis and code quality reports
+- Challenges encountered and solutions implemented
+- Best practices and testing philosophy
 
 ### 🔁 Common Commands Summary
 
