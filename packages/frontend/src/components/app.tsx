@@ -1,10 +1,10 @@
 "use client";
 
 import ChatLayout from "@/layouts/chat-layout";
-import ChatThreadPage from "@/pages/chat-thread-page";
-import LoginPage from "@/pages/login-page";
-import NewChatPage from "@/pages/new-chat-page";
-import NotFoundPage from "@/pages/not-found-page";
+import ChatThreadPage from "@/views/chat-thread-page";
+import LoginPage from "@/views/login-page";
+import NewChatPage from "@/views/new-chat-page";
+import NotFoundPage from "@/views/not-found-page";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 
 export default function App() {
