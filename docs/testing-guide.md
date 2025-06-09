@@ -75,6 +75,10 @@ _All checks have passed successfully: Backend Tests (35s), Frontend Tests (53s),
 
 ### Backend Test Results
 
+![Backend Unit Tests](./backend-unit-tests.png)
+
+_Complete backend test execution showing all 31 tests passing across 6 test files with detailed timing and coverage information_
+
 ```bash
 ✓ src/__tests__/setup.test.ts (2 tests) 3ms
 ✓ src/__tests__/routes/auth.test.ts (3 tests) 16ms
@@ -111,6 +115,10 @@ WARN [Better Auth]: Social provider github is missing clientId or clientSecret
 _Note: This warning is expected in test environment as GitHub OAuth credentials are not required for testing core functionality._
 
 ### Frontend Test Results
+
+![Frontend Unit Tests](./frontend-unit-test.png)
+
+_Frontend test execution results showing 18 tests passing across 3 test suites with comprehensive coverage metrics_
 
 ```bash
 ✓ src/views/__tests__/login-page.test.tsx
@@ -153,6 +161,10 @@ All files        |   96.67 |    90.62 |      90 |   96.67 |
 - Non-boolean attribute warnings (minor JSX prop issues)
 
 ## 🔍 ESLint Output
+
+![Lint and Format Check](./lint-format-check.png)
+
+_Comprehensive linting and formatting check results showing ESLint validation and Prettier formatting status across the entire codebase_
 
 ### Current Linting Status
 
