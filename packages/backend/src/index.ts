@@ -54,6 +54,9 @@ app.get("/", (c) => {
   return c.json({ message: "version 0.0.1" });
 });
 
+// Export the app instance for testing
+export { app };
+
 export default {
   port: 3001,
   fetch: app.fetch,
