@@ -6,6 +6,7 @@ import { LogOut } from "lucide-react";
 import { LearningMaterialsSidebar } from "@/components/learning-materials/learning-material-sidebar";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import { useNavigate } from "react-router";
+import Image from "next/image";
 
 export function Navigation() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ export function Navigation() {
             size="sm"
             className="text-muted-foreground hover:text-foreground cursor-pointer"
           >
-            <img
+            <Image
               src={
                 session?.user.image ??
                 "https://avatar.vercel.sh/" + session?.user.email
