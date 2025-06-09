@@ -36,7 +36,11 @@
     "lint": "concurrently \"bun run lint:frontend\" \"bun run lint:backend\" \"bunx prettier --check .\"",
     "lint:frontend": "bun run --cwd packages/frontend lint",
     "lint:backend": "bun run --cwd packages/backend lint",
-    "format": "bunx prettier --write ."
+    "format": "bunx prettier --write .",
+    "db:generate": "bun run --cwd packages/backend db:generate",
+    "db:migrate": "bun run --cwd packages/backend db:migrate",
+    "db:push": "bun run --cwd packages/backend db:push",
+    "db:studio": "bun run --cwd packages/backend db:studio"
   },
   "dependencies": {
     "immer": "^10.1.1"

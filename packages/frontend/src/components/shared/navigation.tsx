@@ -32,6 +32,8 @@ export function Navigation() {
                 "https://avatar.vercel.sh/" + session?.user.email
               }
               alt={session?.user.name + "'s avatar"}
+              width={24}
+              height={24}
               className="h-6 w-6 rounded-full"
             />
             <span className="hidden sm:inline">{session?.user.name}</span>
