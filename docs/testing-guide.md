@@ -69,7 +69,7 @@ Our testing strategy follows a comprehensive approach covering multiple layers o
 
 ### GitHub Actions CI/CD Results
 
-![GitHub Actions Test Results](../github-actions-result.png)
+![GitHub Actions Test Results](./github-actions-result.png)
 
 _All checks have passed successfully: Backend Tests (35s), Frontend Tests (53s), Lint and Format Check (16s), Integration Tests (1m), and Status Check (51s)_
 
