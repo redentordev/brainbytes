@@ -5,15 +5,15 @@ import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { LearningMaterialsSidebar } from "@/components/learning-materials/learning-material-sidebar";
 import { ModeToggle } from "@/components/theme/mode-toggle";
-import { useNavigate } from "react-router";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export function Navigation() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { data: session } = useSession();
 
   if (!session) {
-    navigate("/login");
+    router.push("/login");
   }
 
   return (
@@ -49,7 +49,7 @@ export function Navigation() {
           size="sm"
           onClick={async () => {
             await signOut();
-            await navigate("/");
+            router.push("/");
           }}
           className="text-muted-foreground hover:text-foreground"
         >

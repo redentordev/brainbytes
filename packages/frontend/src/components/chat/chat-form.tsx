@@ -13,7 +13,7 @@ import { AutoResizeTextarea } from "@/components/autoresize-textarea";
 import { useSession } from "@/lib/auth";
 import { useEffect, useRef } from "react";
 
-import { useNavigate, useSearchParams } from "react-router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { saveChat } from "@/lib/save-chat";
 import { useQueryClient } from "react-query";
 import React from "react";
@@ -44,8 +44,8 @@ export function ChatForm({
   threadId?: string;
 }) {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: session } = useSession();
   const initialChatProcessed = useRef(false);
 
@@ -108,7 +108,7 @@ export function ChatForm({
       }).then((res) => res.json());
 
       setInput("");
-      return navigate(`/chat/${threadId}?initialChat=${input}`);
+      return router.push(`/chat/${threadId}?initialChat=${input}`);
     } else {
       stop();
       void append({

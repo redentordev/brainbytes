@@ -1,13 +1,19 @@
+"use client";
+
 import { Navigation } from "@/components/shared/navigation";
 import { ThreadList } from "@/components/thread/thread-list";
 import { useSession } from "@/lib/auth";
-import { Navigate, Outlet } from "react-router";
+import { redirect } from "next/navigation";
 
-export default function ChatLayout() {
+interface ChatLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function ChatLayout({ children }: ChatLayoutProps) {
   const { data: session } = useSession();
 
   if (!session) {
-    return <Navigate to="/login" />;
+    redirect("/login");
   }
 
   return (
@@ -17,9 +23,7 @@ export default function ChatLayout() {
         <div className="min-w-[320px] max-w-[320px] flex">
           <ThreadList />
         </div>
-        <div className="flex-1 overflow-hidden">
-          <Outlet />
-        </div>
+        <div className="flex-1 overflow-hidden">{children}</div>
       </main>
     </div>
   );

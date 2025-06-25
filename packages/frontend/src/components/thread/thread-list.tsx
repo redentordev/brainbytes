@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Plus, MessageSquare, Loader2, Trash2 } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
-import { useNavigate, useParams } from "react-router";
+import { useRouter, useParams } from "next/navigation";
 import { useMutation, useQuery } from "react-query";
 import { withBaseUrl } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ type Thread = {
 };
 
 export function ThreadList() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["threads"],
@@ -46,14 +46,14 @@ export function ThreadList() {
   const activeThreadId = threadId;
 
   const handleSelectThread = (threadId: string) => {
-    navigate(`/chat/${threadId}`);
+    router.push(`/chat/${threadId}`);
   };
 
   return (
     <div className="flex flex-col h-full bg-background border-r w-full">
       <div className="p-4">
         <Button
-          onClick={() => navigate("/chat")}
+          onClick={() => router.push("/chat")}
           className="w-full gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
           size="default"
         >

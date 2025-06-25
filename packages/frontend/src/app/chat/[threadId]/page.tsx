@@ -1,13 +1,21 @@
+"use client";
+
+import React from "react";
 import { ChatForm } from "@/components/chat/chat-form";
 import { withBaseUrl } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useQuery } from "react-query";
-import { useParams, useSearchParams } from "react-router";
+import { useSearchParams } from "next/navigation";
 
-export default function ChatThreadPage() {
-  const { threadId } = useParams();
-  const [searchParams] = useSearchParams();
+interface ChatThreadPageProps {
+  params: Promise<{ threadId: string }>;
+}
+
+export default function ChatThreadPage({ params }: ChatThreadPageProps) {
+  const { threadId } = React.use(params);
+  const searchParams = useSearchParams();
   const initialChat = searchParams.get("initialChat");
+
   const { data, isLoading } = useQuery({
     queryKey: ["initial-messages", threadId],
     queryFn: async () => {
