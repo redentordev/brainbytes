@@ -10,39 +10,41 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "devDependencies": {
+    "@types/aws-lambda": "8.10.150",
     "@types/bun": "latest",
+    "concurrently": "^8.2.2",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
-    "prettier": "3.5.3",
-    "concurrently": "^8.2.2"
+    "prettier": "3.5.3"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "scripts": {
-    "prepare": "husky",
-    "dev": "concurrently \"bun run dev:backend\" \"bun run dev:frontend\"",
-    "dev:frontend": "bun run --cwd packages/frontend dev",
-    "dev:backend": "bun run --cwd packages/backend dev",
-    "test": "concurrently \"bun run test:backend\" \"bun run test:frontend\"",
-    "test:backend": "bun run --cwd packages/backend test",
-    "test:frontend": "bun run --cwd packages/frontend test",
-    "test:watch": "concurrently \"bun run test:backend:watch\" \"bun run test:frontend:watch\"",
-    "test:backend:watch": "bun run --cwd packages/backend test:watch",
-    "test:frontend:watch": "bun run --cwd packages/frontend test --watch",
-    "build": "concurrently \"bun run build:backend\" \"bun run build:frontend\"",
-    "build:backend": "echo 'Backend build not needed for Bun runtime'",
-    "build:frontend": "bun run --cwd packages/frontend build",
-    "lint": "concurrently \"bun run lint:frontend\" \"bun run lint:backend\" \"bunx prettier --check .\"",
-    "lint:frontend": "bun run --cwd packages/frontend lint",
-    "lint:backend": "bun run --cwd packages/backend lint",
+    "build": "concurrently \"bun run build:function\" \"bun run build:app\"",
+    "build:app": "bun run --cwd packages/app build",
+    "build:function": "bun run --cwd packages/function build",
+    "db:generate": "bun run --cwd packages/core db:generate",
+    "db:migrate": "bun run --cwd packages/core db:migrate",
+    "db:push": "bun run --cwd packages/core db:push",
+    "db:studio": "bun run --cwd packages/core db:studio",
+    "dev": "concurrently \"bun run dev:function\" \"bun run dev:app\"",
+    "dev:app": "bun run --cwd packages/app dev",
+    "dev:function": "bun run --cwd packages/function dev",
     "format": "bunx prettier --write .",
-    "db:generate": "bun run --cwd packages/backend db:generate",
-    "db:migrate": "bun run --cwd packages/backend db:migrate",
-    "db:push": "bun run --cwd packages/backend db:push",
-    "db:studio": "bun run --cwd packages/backend db:studio"
+    "lint": "concurrently \"bun run lint:app\" \"bun run lint:function\" \"bunx prettier --check .\"",
+    "lint:app": "bun run --cwd packages/app lint",
+    "lint:function": "bun run --cwd packages/function lint",
+    "prepare": "husky",
+    "test": "concurrently \"bun run test:function\" \"bun run test:app\"",
+    "test:app": "bun run --cwd packages/app test",
+    "test:app:watch": "bun run --cwd packages/app test --watch",
+    "test:function": "bun run --cwd packages/function test",
+    "test:function:watch": "bun run --cwd packages/function test:watch",
+    "test:watch": "concurrently \"bun run test:function:watch\" \"bun run test:app:watch\""
   },
   "dependencies": {
-    "immer": "^10.1.1"
+    "immer": "^10.1.1",
+    "sst": "3.17.8"
   }
 }
