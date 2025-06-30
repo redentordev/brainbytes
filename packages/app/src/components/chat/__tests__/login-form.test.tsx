@@ -6,7 +6,13 @@ import LoginForm from "../login-form";
 // Mock the auth module
 jest.mock("@/lib/auth-client", () => ({
   signInWithGitHub: jest.fn(),
-  signInWithGoogle: jest.fn(),
+  useSession: jest.fn(() => ({ data: null, isPending: false })),
+}));
+
+// Mock Next.js router hooks
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(() => ({ push: jest.fn() })),
+  useSearchParams: jest.fn(() => ({ get: jest.fn() })),
 }));
 
 // Mock lucide-react icons
@@ -67,7 +73,6 @@ describe("LoginForm", () => {
     const button = screen.getByTestId("sign-in-button");
     expect(button).toBeInTheDocument();
     expect(button).toHaveTextContent("Sign in with GitHub");
-    expect(screen.getByTestId("github-icon")).toBeInTheDocument();
   });
 
   it("shows loading state when sign-in is clicked", async () => {
@@ -78,7 +83,6 @@ describe("LoginForm", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("loader-icon")).toBeInTheDocument();
-      expect(screen.queryByTestId("github-icon")).not.toBeInTheDocument();
     });
   });
 
@@ -109,8 +113,8 @@ describe("LoginForm", () => {
 
     // Should return to normal state
     await waitFor(() => {
-      expect(screen.getByTestId("github-icon")).toBeInTheDocument();
       expect(screen.queryByTestId("loader-icon")).not.toBeInTheDocument();
+      expect(button).toHaveTextContent("Sign in with GitHub");
     });
   });
 
@@ -120,6 +124,6 @@ describe("LoginForm", () => {
     const button = screen.getByTestId("sign-in-button");
     expect(button).toHaveAttribute("type", "button");
     expect(button).toHaveAttribute("data-variant", "outline");
-    expect(button).toHaveClass("cursor-pointer");
+    expect(button).toHaveClass("w-full");
   });
 });

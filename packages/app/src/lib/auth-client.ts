@@ -14,12 +14,6 @@ export const {
   getSession,
 } = authClient;
 
-export const signInWithGoogle = async (callbackURL = "/chat") =>
-  await authClient.signIn.social({
-    provider: "google",
-    callbackURL,
-  });
-
 export const signInWithGitHub = async (callbackURL = "/chat") =>
   await authClient.signIn.social({
     provider: "github",
