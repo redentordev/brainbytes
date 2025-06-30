@@ -5,9 +5,10 @@ import { Material } from "@brainbytes/core/material";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { materialId: string } }
+  { params }: { params: Promise<{ materialId: string }> }
 ) {
   try {
+    const { materialId } = await params;
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -17,7 +18,7 @@ export async function GET(
     }
 
     const material = await Material.getWithTextEntriesByUser(
-      params.materialId,
+      materialId,
       session.user.id
     );
 
@@ -34,9 +35,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { materialId: string } }
+  { params }: { params: Promise<{ materialId: string }> }
 ) {
   try {
+    const { materialId } = await params;
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -58,11 +60,11 @@ export async function PUT(
     }
 
     if (data.isActive === true) {
-      await Material.deactivateAllExcept(session.user.id, params.materialId);
+      await Material.deactivateAllExcept(session.user.id, materialId);
     }
 
     const material = await Material.updateByUser(
-      params.materialId,
+      materialId,
       session.user.id,
       data
     );
@@ -88,9 +90,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { materialId: string } }
+  { params }: { params: Promise<{ materialId: string }> }
 ) {
   try {
+    const { materialId } = await params;
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -99,7 +102,7 @@ export async function DELETE(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await Material.removeByUser(params.materialId, session.user.id);
+    await Material.removeByUser(materialId, session.user.id);
     return Response.json({ success: true });
   } catch (error) {
     console.error("Error deleting material:", error);

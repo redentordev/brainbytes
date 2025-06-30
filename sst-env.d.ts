@@ -9,11 +9,6 @@ declare module "sst" {
       type: "sst.sst.Secret";
       value: string;
     };
-    BrainbytesApi: {
-      name: string;
-      type: "sst.aws.Function";
-      url: string;
-    };
     BrainbytesApp: {
       type: "sst.aws.Nextjs";
       url: string;

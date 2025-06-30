@@ -5,9 +5,10 @@ import { Material } from "@brainbytes/core/material";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { materialId: string } }
+  { params }: { params: Promise<{ materialId: string }> }
 ) {
   try {
+    const { materialId } = await params;
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -17,7 +18,7 @@ export async function GET(
     }
 
     const material = await Material.getByIdAndUserId(
-      params.materialId,
+      materialId,
       session.user.id
     );
     if (!material) {
@@ -29,7 +30,7 @@ export async function GET(
       );
     }
 
-    const entries = await Material.TextEntry.getByMaterialId(params.materialId);
+    const entries = await Material.TextEntry.getByMaterialId(materialId);
     return Response.json({ entries });
   } catch (error) {
     console.error("Error fetching text entries:", error);
@@ -42,9 +43,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { materialId: string } }
+  { params }: { params: Promise<{ materialId: string }> }
 ) {
   try {
+    const { materialId } = await params;
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -63,7 +65,7 @@ export async function POST(
     }
 
     const material = await Material.getByIdAndUserId(
-      params.materialId,
+      materialId,
       session.user.id
     );
     if (!material) {
@@ -77,7 +79,7 @@ export async function POST(
 
     const entry = await Material.TextEntry.add({
       ...data,
-      materialId: params.materialId,
+      materialId,
     });
 
     return Response.json({ entry }, { status: 201 });

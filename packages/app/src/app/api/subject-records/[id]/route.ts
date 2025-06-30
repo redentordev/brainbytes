@@ -5,9 +5,10 @@ import { Material } from "@brainbytes/core/material";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -25,7 +26,7 @@ export async function PUT(
       );
     }
 
-    const subject = await Material.Subject.getRecordById(params.id);
+    const subject = await Material.Subject.getRecordById(id);
     if (!subject || subject.userId !== session.user.id) {
       return Response.json(
         {
@@ -48,7 +49,7 @@ export async function PUT(
       }
     }
 
-    const updatedSubject = await Material.Subject.update(params.id, {
+    const updatedSubject = await Material.Subject.update(id, {
       name,
     });
 
@@ -71,9 +72,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -82,7 +84,7 @@ export async function DELETE(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await Material.Subject.removeByUser(params.id, session.user.id);
+    await Material.Subject.removeByUser(id, session.user.id);
     return Response.json({ success: true });
   } catch (error) {
     console.error("Error deleting subject:", error);

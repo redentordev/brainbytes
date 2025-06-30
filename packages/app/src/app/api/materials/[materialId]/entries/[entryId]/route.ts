@@ -5,9 +5,10 @@ import { Material } from "@brainbytes/core/material";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { materialId: string; entryId: string } }
+  { params }: { params: Promise<{ materialId: string; entryId: string }> }
 ) {
   try {
+    const { materialId, entryId } = await params;
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -17,7 +18,7 @@ export async function PUT(
     }
 
     const material = await Material.getByIdAndUserId(
-      params.materialId,
+      materialId,
       session.user.id
     );
     if (!material) {
@@ -41,7 +42,7 @@ export async function PUT(
       );
     }
 
-    const entry = await Material.TextEntry.update(params.entryId, data);
+    const entry = await Material.TextEntry.update(entryId, data);
 
     if (!entry) {
       return Response.json({ error: "Text entry not found" }, { status: 404 });
@@ -59,9 +60,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { materialId: string; entryId: string } }
+  { params }: { params: Promise<{ materialId: string; entryId: string }> }
 ) {
   try {
+    const { materialId, entryId } = await params;
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -71,7 +73,7 @@ export async function DELETE(
     }
 
     const material = await Material.getByIdAndUserId(
-      params.materialId,
+      materialId,
       session.user.id
     );
     if (!material) {
@@ -83,7 +85,7 @@ export async function DELETE(
       );
     }
 
-    await Material.TextEntry.remove(params.entryId);
+    await Material.TextEntry.remove(entryId);
     return Response.json({ success: true });
   } catch (error) {
     console.error("Error deleting text entry:", error);
