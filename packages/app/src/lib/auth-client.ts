@@ -14,16 +14,16 @@ export const {
   getSession,
 } = authClient;
 
-export const signInWithGoogle = async () =>
+export const signInWithGoogle = async (callbackURL = "/chat") =>
   await authClient.signIn.social({
     provider: "google",
-    callbackURL: "/chat",
+    callbackURL,
   });
 
-export const signInWithGitHub = async () =>
+export const signInWithGitHub = async (callbackURL = "/chat") =>
   await authClient.signIn.social({
     provider: "github",
-    callbackURL: "/chat",
+    callbackURL,
   });
 
 export type Session = typeof authClient.$Infer.Session;

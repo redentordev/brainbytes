@@ -70,7 +70,7 @@ const LearningMaterialsContext = createContext<
   LearningMaterialsContextType | undefined
 >(undefined);
 
-const API_URL = "http://localhost:3001/api";
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api`;
 
 // Helper function to safely fetch data with error handling
 const fetchWithErrorHandling = async (url: string, options?: RequestInit) => {

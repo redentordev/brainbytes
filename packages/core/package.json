@@ -5,7 +5,9 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./schema": "./src/schema.ts"
+    "./schema": "./src/schema.ts",
+    "./material": "./src/material/index.ts",
+    "./thread": "./src/thread/index.ts"
   },
   "type": "module",
   "private": true,

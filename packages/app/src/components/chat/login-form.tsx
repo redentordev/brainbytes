@@ -2,17 +2,49 @@
 
 import { Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
-import { signInWithGitHub, signInWithGoogle } from "@/lib/auth-client";
-import { useState } from "react";
+import {
+  signInWithGitHub,
+  signInWithGoogle,
+  useSession,
+} from "@/lib/auth-client";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginForm() {
   const [githubLoading, setGithubLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const { data: session, isPending } = useSession();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (session) {
+      const callbackUrl = searchParams.get("callbackUrl") || "/chat";
+      router.push(callbackUrl);
+    }
+  }, [session, router, searchParams]);
+
+  // Show loading state while session is being checked
+  if (isPending) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-4">
+        <div className="w-full max-w-md space-y-6">
+          <div className="text-center">
+            <Loader2 className="mx-auto h-8 w-8 animate-spin" />
+            <p className="text-muted-foreground mt-2">
+              Checking authentication...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleGitHubSignIn = async () => {
     setGithubLoading(true);
     try {
-      await signInWithGitHub();
+      const callbackUrl = searchParams.get("callbackUrl") || "/chat";
+      await signInWithGitHub(callbackUrl);
     } catch (error) {
       console.error("GitHub sign-in error:", error);
     } finally {
@@ -23,7 +55,8 @@ export default function LoginForm() {
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
     try {
-      await signInWithGoogle();
+      const callbackUrl = searchParams.get("callbackUrl") || "/chat";
+      await signInWithGoogle(callbackUrl);
     } catch (error) {
       console.error("Google sign-in error:", error);
     } finally {

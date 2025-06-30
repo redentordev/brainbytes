@@ -61,7 +61,7 @@ export default $config({
         command: "bun run dev",
       },
       environment: {
-        NEXT_PUBLIC_API_URL: api.url,
+        NEXT_PUBLIC_API_URL: "http://localhost:3000",
       },
     });
 

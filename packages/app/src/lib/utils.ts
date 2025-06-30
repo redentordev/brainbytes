@@ -6,5 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function withBaseUrl(path: string) {
-  return `${process.env.NEXT_PUBLIC_API_URL}${path}`;
+  return `${path}`;
 }

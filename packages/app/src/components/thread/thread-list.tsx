@@ -35,8 +35,12 @@ export function ThreadList() {
       });
       return await response.json();
     },
-    onSuccess: () => {
+    onSuccess: (_, deletedThreadId) => {
       refetch();
+      // If the deleted thread is the currently active thread, redirect to new chat
+      if (deletedThreadId === activeThreadId) {
+        router.push("/chat");
+      }
     },
   });
 
