@@ -61,7 +61,10 @@ export default $config({
         command: "bun run dev",
       },
       environment: {
-        NEXT_PUBLIC_API_URL: "http://localhost:3000",
+        NEXT_PUBLIC_API_URL:
+          $app.stage === "dev"
+            ? "http://localhost:3000"
+            : "https://brainbytes.redentor.dev",
       },
     });
 
