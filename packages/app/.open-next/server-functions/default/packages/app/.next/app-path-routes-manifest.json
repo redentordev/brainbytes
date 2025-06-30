@@ -1,0 +1,21 @@
+{
+  "/api/chat/[threadId]/route": "/api/chat/[threadId]",
+  "/api/chat/route": "/api/chat",
+  "/api/completion/route": "/api/completion",
+  "/api/materials/[materialId]/entries/[entryId]/route": "/api/materials/[materialId]/entries/[entryId]",
+  "/api/materials/[materialId]/entries/route": "/api/materials/[materialId]/entries",
+  "/api/materials/[materialId]/route": "/api/materials/[materialId]",
+  "/api/materials/route": "/api/materials",
+  "/api/new-chat/route": "/api/new-chat",
+  "/api/subject-records/[id]/route": "/api/subject-records/[id]",
+  "/api/subject-records/route": "/api/subject-records",
+  "/api/threads/[id]/route": "/api/threads/[id]",
+  "/api/threads/route": "/api/threads",
+  "/favicon.ico/route": "/favicon.ico",
+  "/api/auth/[...all]/route": "/api/auth/[...all]",
+  "/_not-found/page": "/_not-found",
+  "/page": "/",
+  "/login/page": "/login",
+  "/chat/[threadId]/page": "/chat/[threadId]",
+  "/chat/page": "/chat"
+}

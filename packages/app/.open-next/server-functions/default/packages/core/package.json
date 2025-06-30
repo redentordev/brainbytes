@@ -1,0 +1,37 @@
+{
+  "name": "@brainbytes/core",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema.ts",
+    "./material": "./src/material/index.ts",
+    "./thread": "./src/thread/index.ts"
+  },
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:seed": "drizzle-kit seed",
+    "db:setup": "bun run db:generate && bun run db:migrate && bun run db:seed",
+    "dev": "bun run db:setup && bun dev"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/pg": "^8.15.1",
+    "drizzle-kit": "^0.31.2",
+    "tsx": "^4.20.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "ai": "^4.3.15",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.44.2",
+    "pg": "^8.15.6"
+  }
+}

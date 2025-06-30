@@ -1,0 +1,133 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "dynamicRoutes": [
+    {
+      "page": "/api/auth/[...all]",
+      "regex": "^/api/auth/(.+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPall": "nxtPall"
+      },
+      "namedRegex": "^/api/auth/(?<nxtPall>.+?)(?:/)?$"
+    },
+    {
+      "page": "/api/chat/[threadId]",
+      "regex": "^/api/chat/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPthreadId": "nxtPthreadId"
+      },
+      "namedRegex": "^/api/chat/(?<nxtPthreadId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/materials/[materialId]",
+      "regex": "^/api/materials/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPmaterialId": "nxtPmaterialId"
+      },
+      "namedRegex": "^/api/materials/(?<nxtPmaterialId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/materials/[materialId]/entries",
+      "regex": "^/api/materials/([^/]+?)/entries(?:/)?$",
+      "routeKeys": {
+        "nxtPmaterialId": "nxtPmaterialId"
+      },
+      "namedRegex": "^/api/materials/(?<nxtPmaterialId>[^/]+?)/entries(?:/)?$"
+    },
+    {
+      "page": "/api/materials/[materialId]/entries/[entryId]",
+      "regex": "^/api/materials/([^/]+?)/entries/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPmaterialId": "nxtPmaterialId",
+        "nxtPentryId": "nxtPentryId"
+      },
+      "namedRegex": "^/api/materials/(?<nxtPmaterialId>[^/]+?)/entries/(?<nxtPentryId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/subject-records/[id]",
+      "regex": "^/api/subject\\-records/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/subject\\-records/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/threads/[id]",
+      "regex": "^/api/threads/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/threads/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/chat/[threadId]",
+      "regex": "^/chat/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPthreadId": "nxtPthreadId"
+      },
+      "namedRegex": "^/chat/(?<nxtPthreadId>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/chat",
+      "regex": "^/chat(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/chat(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "RSC",
+    "varyHeader": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch",
+    "prefetchHeader": "Next-Router-Prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "Next-Router-Segment-Prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  },
+  "rewrites": []
+}
