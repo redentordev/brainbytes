@@ -44,15 +44,9 @@ export default $config({
 
     const allSecrets = Object.values(secret);
 
-    const api = new sst.aws.Function("BrainbytesApi", {
-      handler: "packages/function/src/api/index.handler",
-      url: true,
-      link: allSecrets,
-    });
-
     const web = new sst.aws.Nextjs("BrainbytesApp", {
       path: "packages/app",
-      link: [api, ...allSecrets],
+      link: [...allSecrets],
       domain: {
         dns: sst.cloudflare.dns(),
         name: "brainbytes.redentor.dev",
@@ -70,7 +64,6 @@ export default $config({
 
     return {
       web: web.url,
-      api: api.url,
     };
   },
 });
