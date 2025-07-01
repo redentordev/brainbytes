@@ -20,10 +20,6 @@ export const auth = betterAuth({
       clientId: Resource.GithubClientId.value,
       clientSecret: Resource.GithubClientSecret.value,
     },
-    google: {
-      clientId: Resource.GoogleClientId.value,
-      clientSecret: Resource.GoogleClientSecret.value,
-    },
   },
 });
 

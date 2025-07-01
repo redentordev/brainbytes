@@ -23,14 +23,6 @@ export default $config({
         "GithubClientSecret",
         process.env.GITHUB_CLIENT_SECRET
       ),
-      GoogleClientId: new sst.Secret(
-        "GoogleClientId",
-        process.env.GOOGLE_CLIENT_ID
-      ),
-      GoogleClientSecret: new sst.Secret(
-        "GoogleClientSecret",
-        process.env.GOOGLE_CLIENT_SECRET
-      ),
       OpenaiApiKey: new sst.Secret("OpenaiApiKey", process.env.OPENAI_API_KEY),
       CloudflareApiToken: new sst.Secret(
         "CloudflareApiToken",
