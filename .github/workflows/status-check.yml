@@ -30,56 +30,46 @@ jobs:
             echo "✅ Code formatting is correct"
           else
             echo "⚠️ Code formatting issues found"
-            echo "ℹ️ Run 'bunx prettier --write .' to fix formatting"
+            echo "ℹ️ Run 'bun run format' to fix formatting"
           fi
 
-      - name: Backend dependency check
-        working-directory: ./packages/backend
+      - name: App dependency check
         run: |
-          echo "📦 Checking backend dependencies..."
+          echo "📦 Checking app dependencies..."
           bun install --dry-run
-          echo "✅ Backend dependencies are valid"
+          echo "✅ App dependencies are valid"
 
-      - name: Frontend dependency check
-        working-directory: ./packages/frontend
+      - name: App lint check
         run: |
-          echo "📦 Checking frontend dependencies..."
-          bun install --dry-run
-          echo "✅ Frontend dependencies are valid"
-
-      - name: Backend lint check
-        working-directory: ./packages/backend
-        run: |
-          echo "🔍 Quick backend lint check..."
+          echo "🔍 Quick app lint check..."
           if bun run lint; then
-            echo "✅ Backend linting passed"
+            echo "✅ App linting passed"
           else
-            echo "⚠️ Backend linting issues found"
+            echo "⚠️ App linting issues found"
           fi
 
-      - name: Frontend lint check
-        working-directory: ./packages/frontend
+      - name: App typecheck
         run: |
-          echo "🔍 Quick frontend lint check..."
-          if bun run lint; then
-            echo "✅ Frontend linting passed"
+          echo "🔍 Quick typecheck..."
+          if bun run typecheck; then
+            echo "✅ Typecheck passed"
           else
-            echo "⚠️ Frontend linting issues found"
+            echo "⚠️ Typecheck issues found"
           fi
 
-      - name: Frontend build check
-        working-directory: ./packages/frontend
+      - name: App build check
         run: |
-          echo "🔨 Checking frontend build..."
+          echo "🔨 Checking app build..."
           if timeout 60s bun run build; then
-            echo "✅ Frontend build successful"
+            echo "✅ App build successful"
           else
-            echo "⚠️ Frontend build had issues"
+            echo "⚠️ App build had issues"
           fi
 
       - name: Status Summary
         run: |
           echo "✅ Dependencies checked"
           echo "✅ Linting verified"
+          echo "✅ Typecheck verified"
           echo "✅ Build validation complete"
           echo "ℹ️ See full test workflow for comprehensive testing"
