@@ -30,8 +30,7 @@ Before starting, ensure you have the following installed:
 ### Optional Tools
 
 - **VS Code** - Recommended editor with TypeScript support
-- **Docker** - For containerized development (optional)
-- **PostgreSQL** - Local database (if not using cloud)
+- **PostgreSQL** - Local database (if not using cloud database)
 
 ## ☁️ AWS CLI Setup
 
@@ -253,12 +252,12 @@ SST supports two deployment methods for Next.js:
 - ✅ **Global CDN** with CloudFront
 - ✅ **Zero server management**
 
-#### 2. **Containers with Docker**
+#### 2. **Alternative: Traditional Server Deployment**
 
 - ✅ **Full control** over runtime environment
 - ✅ **Consistent** across environments
 - ✅ **Better for** long-running processes
-- ✅ **ECS Fargate** deployment
+- ✅ **EC2 or ECS** deployment options
 
 ### BrainBytes Architecture Benefits
 
