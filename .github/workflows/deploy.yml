@@ -41,6 +41,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::852319270180:role/brainbytes-production-github
+          role-session-name: GitHubActions-BrainBytes
           aws-region: us-east-1
 
       - name: Install dependencies
