@@ -33,14 +33,6 @@ declare module "sst" {
       type: "sst.sst.Secret";
       value: string;
     };
-    GoogleClientId: {
-      type: "sst.sst.Secret";
-      value: string;
-    };
-    GoogleClientSecret: {
-      type: "sst.sst.Secret";
-      value: string;
-    };
     OpenaiApiKey: {
       type: "sst.sst.Secret";
       value: string;

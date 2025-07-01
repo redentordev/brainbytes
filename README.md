@@ -1,272 +1,363 @@
-# 🧠 BrainBytes — DevOps Project Documentation
+# 🧠 BrainBytes — AI-Powered Learning Platform
 
-BrainBytes is an **AI-powered tutoring platform** developed to make academic help more accessible for Filipino students. This project focuses on the deployment infrastructure using modern **DevOps practices**, containerization, automation, and cloud services.
+[![Deploy](https://github.com/redentordev/brainbytes/actions/workflows/deploy.yml/badge.svg)](https://github.com/redentordev/brainbytes/actions/workflows/deploy.yml)
+[![Tests](https://github.com/redentordev/brainbytes/actions/workflows/test.yml/badge.svg)](https://github.com/redentordev/brainbytes/actions/workflows/test.yml)
+[![Status Check](https://github.com/redentordev/brainbytes/actions/workflows/status-check.yml/badge.svg)](https://github.com/redentordev/brainbytes/actions/workflows/status-check.yml)
 
-![Tests](https://github.com/your-username/your-repo/actions/workflows/test.yml/badge.svg)
+BrainBytes is an **AI-powered tutoring platform** designed to make academic help more accessible for Filipino students. Built with modern web technologies and deployed using cutting-edge DevOps practices.
+
+🌐 **Live Application**: [https://brainbytes.redentor.dev](https://brainbytes.redentor.dev)
 
 ## 📌 Table of Contents
 
-1. [Project Overview](#project-overview)
-2. [System Architecture](#system-architecture)
-3. [Technology Stack](#technology-stack)
-4. [CI/CD Pipeline](#ci-cd-pipeline)
-5. [Monitoring & Observability](#monitoring--observability)
-6. [Project Setup (Local)](#project-setup-local)
-7. [Testing Strategy & Results](docs/testing-guide.md)
-8. [API Documentation](packages/backend/docs/api-documentation.md)
-9. [Team Members](#team-members)
-10. [License](#license)
+1. [Project Overview](#-project-overview)
+2. [System Architecture](#️-system-architecture)
+3. [Technology Stack](#️-technology-stack)
+4. [Quick Start](#-quick-start)
+5. [Development Guide](#-development-guide)
+6. [CI/CD & Deployment](#-cicd--deployment)
+7. [Testing](#-testing)
+8. [Documentation](#-documentation)
+9. [Contributing](#-contributing)
+10. [Team](#-team)
 
-## 🧩 Project Overview
+## 🎯 Project Overview
 
-BrainBytes is designed to streamline academic support using AI technologies. This project implements the backend and frontend application layers, infrastructure, automation pipelines, and cloud deployment architecture.
+BrainBytes leverages artificial intelligence to provide personalized tutoring experiences for students. The platform features:
+
+- **Interactive AI Chat**: Real-time conversations with AI tutors
+- **Learning Materials Management**: Upload and organize study materials
+- **Subject-Specific Assistance**: Tailored help across different academic subjects
+- **Progress Tracking**: Monitor learning progress and chat history
+- **Multi-Platform Access**: Responsive design for desktop and mobile
+
+### Key Features
+
+- 🤖 **AI-Powered Tutoring** using OpenAI's GPT models
+- 📚 **Material Management** with text and file upload support
+- 🔐 **Secure Authentication** via GitHub and Google OAuth
+- 📱 **Responsive Design** with modern UI components
+- ⚡ **Real-time Chat** with streaming responses
+- 📊 **Progress Tracking** and chat history
 
 ## 🏗️ System Architecture
 
-The system follows a microservices-ready monorepo pattern using Bun and Node.js. Key components include:
+BrainBytes follows a modern monorepo architecture with clear separation of concerns:
 
-- **Frontend**: Next.js web application
-- **Backend**: Node.js server using Hono (ultrafast JS web framework)
-- **Database**: PostgreSQL
-- **Containerization**: Docker with ECS Fargate
-- **Infrastructure**: Managed via SST or Pulumi
-- **Monitoring**: Prometheus and Grafana
+```
+brainbytes/
+├── packages/
+│   ├── app/          # Next.js frontend application
+│   └── core/         # Shared database schema and utilities
+├── .github/
+│   └── workflows/    # CI/CD automation
+├── docs/             # Comprehensive documentation
+└── sst.config.ts     # Infrastructure as Code
+```
+
+### Architecture Diagram
 
 ![System Architecture](docs/architecture.png)
 
-![CI/CD Pipeline Architecture](docs/ci-cd-architecture.png)
+### Infrastructure
+
+- **Frontend**: Next.js application deployed on AWS
+- **Database**: PostgreSQL with Drizzle ORM
+- **Authentication**: better-auth with OAuth providers
+- **AI Integration**: OpenAI API for chat functionality
+- **CDN**: Cloudflare for global content delivery
+- **Infrastructure**: SST (Serverless Stack) for AWS deployment
 
 ## 🛠️ Technology Stack
 
-| Component            | Tool/Framework           |
-| -------------------- | ------------------------ |
-| **Monorepo**         | Node.js Workspaces + Bun |
-| **Frontend**         | Next.js                  |
-| **Backend**          | Node.js + Hono           |
-| **Database**         | PostgreSQL               |
-| **ORM**              | Drizzle                  |
-| **Containerization** | Docker + ECS + Fargate   |
-| **Infrastructure**   | SST or Pulumi            |
-| **CI/CD**            | GitHub Actions           |
-| **Monitoring**       | Prometheus + Grafana     |
-| **Cloud Provider**   | AWS                      |
+| Component          | Technology              | Purpose                       |
+| ------------------ | ----------------------- | ----------------------------- |
+| **Frontend**       | Next.js 15, React 19    | Modern web application        |
+| **Styling**        | Tailwind CSS, shadcn/ui | Component library and styling |
+| **Backend**        | Next.js API Routes      | Server-side functionality     |
+| **Database**       | PostgreSQL, Drizzle ORM | Data persistence              |
+| **Authentication** | better-auth             | User management               |
+| **AI**             | OpenAI API              | Chat functionality            |
+| **Runtime**        | Bun                     | Fast JavaScript runtime       |
+| **Infrastructure** | SST, AWS                | Cloud deployment              |
+| **CI/CD**          | GitHub Actions          | Automation                    |
+| **Monitoring**     | Cloudflare Analytics    | Performance tracking          |
 
-## 🔁 CI/CD Pipeline
+## 🚀 Quick Start
 
-GitHub Actions is used to automate testing, containerization, and deployment. The workflow:
+### Prerequisites
 
-1. **Build**: Validate code, install dependencies, and build Docker images
-2. **Test**: Run backend and frontend unit/integration tests
-3. **Deploy**: Push Docker image to AWS ECR, trigger ECS deployment via Pulumi or SST
+- [Bun](https://bun.sh/) (latest version)
+- [Node.js](https://nodejs.org/) 20+
+- [Git](https://git-scm.com/)
+- [AWS CLI](https://aws.amazon.com/cli/) (for SST development)
+- [SST](https://sst.dev/) (installed via project dependencies)
 
-## 📈 Monitoring & Observability
+### Installation
 
-| Tool           | Purpose                                |
-| -------------- | -------------------------------------- |
-| **Prometheus** | Collects backend/API/container metrics |
-| **Grafana**    | Visualizes logs, metrics, alerts       |
-| **CloudWatch** | Stores ECS logs and cloud events       |
+1. **Clone the repository**
 
-## 💻 Project Setup (Local)
-
-Here is the full step-by-step setup guide for running BrainBytes locally:
-
-### ✅ Prerequisites
-
-Ensure the following are installed:
-
-- [GitHub Desktop](https://desktop.github.com/)
-- [Bun](https://bun.sh/)
-- [Docker](https://www.docker.com/products/docker-desktop)
-- [Node.js](https://nodejs.org/en) (if needed)
-
-### 1. Clone the Repository
-
-Using **GitHub Desktop**:
-
-1. Open GitHub Desktop → `File > Clone Repository`
-2. Paste the URL:
+   ```bash
+   git clone https://github.com/redentordev/brainbytes.git
+   cd brainbytes
    ```
-   https://github.com/redentordev/devops.git
+
+2. **Install dependencies** (includes SST)
+
+   ```bash
+   bun install
    ```
-3. Choose a local path and click **Clone**.
 
-### 2. Create Environment Files
+3. **Verify SST installation**
 
-Create a single `.env` file in the root directory using `.env.example` as reference:
+   ```bash
+   bunx sst version
+   # Should show SST version and AWS account info
+   ```
 
-#### 📁 `.env.example` (Reference)
+4. **Set up environment variables**
+
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with your configuration
+   ```
+
+5. **Start SST development mode**
+
+   ```bash
+   bunx sst dev
+   # Or if installed globally: sst dev
+   ```
+
+6. **Access the application**
+   - Frontend: URL displayed in SST output
+   - Console: SST Console URL for monitoring
+
+> **💡 Need detailed setup instructions?** See our comprehensive [Local Development Setup Guide](docs/local-development-setup.md) for AWS CLI configuration, SST workflow, and troubleshooting.
+
+## 💻 Development Guide
+
+### Environment Setup
+
+Create a `.env.local` file in the root directory:
 
 ```env
-DATABASE_URL=
-BETTER_AUTH_SECRET=
-GITHUB_CLIENT_ID=
-GITHUB_CLIENT_SECRET=
-OPENAI_API_KEY=
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5432/brainbytes
+
+# Authentication
+BETTER_AUTH_SECRET=your-32-character-secret-key
+
+# OAuth Providers
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+
+# AI Integration
+OPENAI_API_KEY=sk-proj-your-openai-api-key
+
+# Cloudflare (for production)
+CLOUDFLARE_API_TOKEN=your-cloudflare-token
+CLOUDFLARE_DEFAULT_ACCOUNT_ID=your-account-id
 ```
 
-Copy this example file to create your own `.env` in the project root with appropriate values:
+### Available Scripts
 
-```bash
-cp .env.example .env
+| Command              | Description               |
+| -------------------- | ------------------------- |
+| `bun run dev`        | Start development server  |
+| `bun run build`      | Build for production      |
+| `bun run test`       | Run all tests             |
+| `bun run test:watch` | Run tests in watch mode   |
+| `bun run lint`       | Check code quality        |
+| `bun run format`     | Format code with Prettier |
+| `bun run typecheck`  | Check TypeScript types    |
+
+### Project Structure
+
+```
+packages/app/
+├── src/
+│   ├── app/              # Next.js app router
+│   │   ├── api/          # API routes
+│   │   ├── chat/         # Chat interface
+│   │   └── login/        # Authentication
+│   ├── components/       # React components
+│   │   ├── chat/         # Chat-related components
+│   │   ├── ui/           # shadcn/ui components
+│   │   └── shared/       # Shared components
+│   ├── lib/              # Utility functions
+│   └── contexts/         # React contexts
+└── __tests__/            # Test files
+
+packages/core/
+├── src/
+│   ├── auth/             # Authentication schema
+│   ├── material/         # Learning materials
+│   ├── thread/           # Chat threads
+│   └── schema.ts         # Database schema
+└── migrations/           # Database migrations
 ```
 
-Then fill in the values in your new `.env` file.
+## 🔄 CI/CD & Deployment
 
-### 3. Install Dependencies
+BrainBytes uses GitHub Actions for continuous integration and deployment:
 
-From the root of the project, run:
+### Workflows
 
-```bash
-bun install
-```
+1. **Deploy** (`deploy.yml`): Automatic deployment to production on main branch
+2. **Test** (`test.yml`): Run tests on all branches and pull requests
+3. **Status Check** (`status-check.yml`): Quick checks for pull requests
 
-### 4. Run the App with Docker
+### Deployment Process
 
-To spin up frontend, backend, and Postgres containers:
+1. **Code Push**: Developer pushes to main branch
+2. **Quality Checks**: TypeScript, ESLint, and tests run
+3. **AWS Authentication**: OIDC-based secure authentication
+4. **SST Deployment**: Infrastructure and application deployment
+5. **Live Update**: Application available at production URL
 
-```bash
-docker compose up --watch --build
-```
+### AWS Infrastructure
 
-### 5. Database Setup Using Drizzle
+- **Authentication**: OIDC integration with GitHub Actions
+- **Compute**: AWS Lambda and Edge functions
+- **Database**: RDS PostgreSQL or Neon
+- **CDN**: CloudFront with Cloudflare
+- **Domain**: Custom domain with SSL
 
-Open a **new terminal**, navigate to the backend directory:
+For detailed setup instructions, see: [GitHub Workflows Guide](docs/github-workflows-guide.md)
 
-```bash
-cd packages/backend
-```
+## 🧪 Testing
 
-For **first-time setup**, generate schema files and push them to the database:
+### Test Coverage
 
-```bash
-docker-compose exec backend bunx drizzle-kit generate
-docker-compose exec backend bunx drizzle-kit push
-```
+- **Frontend**: Jest with React Testing Library (89.58% coverage)
+- **Backend**: API endpoint testing
+- **Integration**: End-to-end user flows
+- **Type Safety**: TypeScript strict mode
 
-To open the **Drizzle Studio** GUI:
-
-```bash
-docker-compose exec backend bunx drizzle-kit studio
-```
-
-To apply migrations instead:
+### Running Tests
 
 ```bash
-docker-compose exec backend bunx drizzle-kit migrate
-```
-
-### 6. Access the App
-
-| Service         | URL                   |
-| --------------- | --------------------- |
-| **Frontend**    | http://localhost:3000 |
-| **Backend API** | http://localhost:3001 |
-
-### 7. Testing
-
-The project includes comprehensive test suites for both frontend and backend with 96.67% code coverage:
-
-#### Quick Test Commands
-
-```bash
-# Run all tests (frontend + backend)
+# Run all tests
 bun run test
 
 # Run tests in watch mode
 bun run test:watch
 
-# Run individual test suites
-bun run test:frontend   # Jest tests for Next.js frontend
-bun run test:backend    # Vitest tests for Hono backend
+# Run specific test suites
+bun run test:app      # Frontend tests only
 ```
 
-#### Test Results Summary
+### Test Results
 
-- **Backend**: 31 tests passing (100% success rate) - API endpoints, authentication, CORS validation
-- **Frontend**: 18 tests passing (96.67% coverage) - React components, user interactions, forms
-- **CI/CD**: Automated testing on every push and PR with GitHub Actions
+- ✅ **16 tests passing** (15 passed, 1 skipped)
+- ✅ **High coverage** on critical components
+- ✅ **Automated testing** in CI/CD pipeline
 
-#### Comprehensive Documentation
+For detailed testing information, see: [Testing Guide](docs/testing-guide.md)
 
-For detailed testing strategy, results analysis, ESLint output, and challenges encountered, see:
-**📊 [Complete Testing Guide](docs/testing-guide.md)**
+## 📚 Documentation
 
-This documentation includes:
+Comprehensive documentation is available in the `/docs` directory:
 
-- Test results output and coverage metrics
-- ESLint analysis and code quality reports
-- Challenges encountered and solutions implemented
-- Best practices and testing philosophy
+### Development & Setup
 
-### 🔁 Common Commands Summary
+- [Local Development Setup](docs/local-development-setup.md) - Complete setup guide with AWS CLI and SST
+- [GitHub Workflows Guide](docs/github-workflows-guide.md) - CI/CD setup and troubleshooting
+- [Environment Requirements](docs/brainbytes-environment-requirements.md) - Setup requirements
+- [Container Setup Guide](docs/brainbytes-container-setup-guide.md) - Docker configuration
 
-| Task                    | Command                                                 |
-| ----------------------- | ------------------------------------------------------- |
-| Install packages        | `bun install`                                           |
-| Start local dev env     | `docker compose up --watch --build`                     |
-| **Run all tests**       | `bun run test`                                          |
-| **Run tests in watch**  | `bun run test:watch`                                    |
-| **Check code quality**  | `bun run lint`                                          |
-| **Format code**         | `bun run format`                                        |
-| Generate DB schema      | `docker-compose exec backend bunx drizzle-kit generate` |
-| Push schema to DB       | `docker-compose exec backend bunx drizzle-kit push`     |
-| View database (Drizzle) | `docker-compose exec backend bunx drizzle-kit studio`   |
-| Run DB migration        | `docker-compose exec backend bunx drizzle-kit migrate`  |
-| Stop all services       | `docker compose down`                                   |
+### Architecture & Features
 
-## 🤝 Contribution Guide
+- [Application Architecture](docs/brainbytes-application-architecture.md) - System design
+- [Feature Documentation](docs/brainbytes-feature-documentation.md) - Feature specifications
+- [Testing Guide](docs/testing-guide.md) - Testing strategy and results
 
-### Branching Strategy
+### Support
 
-1. Always branch from the latest `main` branch:
+- [Troubleshooting Guide](docs/brainbytes-troubleshooting-guide.md) - Common issues and solutions
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these guidelines:
+
+### Development Workflow
+
+1. **Fork and Clone**
 
    ```bash
-   git checkout main
-   git pull
-   git checkout -b feature/<feature-name>
+   git clone https://github.com/your-username/brainbytes.git
+   cd brainbytes
    ```
 
-2. Make your changes, commit them with descriptive messages:
+2. **Create Feature Branch**
 
    ```bash
-   git add .
-   git commit -m "Add feature: description of changes"
+   git checkout -b feature/your-feature-name
    ```
 
-3. Push your branch to the remote repository:
+3. **Make Changes**
+
+   - Follow existing code style
+   - Add tests for new features
+   - Update documentation as needed
+
+4. **Test Your Changes**
+
    ```bash
-   git push -u origin feature/<feature-name>
+   bun run test
+   bun run lint
+   bun run typecheck
    ```
 
-### Commit Message Conventions
+5. **Submit Pull Request**
+   - Provide clear description
+   - Reference related issues
+   - Ensure all checks pass
 
-Follow these prefixes for your commit messages:
+### Commit Convention
 
-| Prefix        | Description                   | Example                                           |
-| ------------- | ----------------------------- | ------------------------------------------------- |
-| `add:`        | Adding new files or features  | `add: license file`                               |
-| `change:`     | Updates to existing content   | `change: update readme.md`                        |
-| `fix:`        | Bug fixes                     | `fix: docs directory`                             |
-| `remove:`     | Removing content              | `remove: docker compose version`                  |
-| `checkpoint:` | Significant milestone commits | `checkpoint: add frontend and backend ai chatbot` |
+| Prefix      | Description      | Example                               |
+| ----------- | ---------------- | ------------------------------------- |
+| `feat:`     | New features     | `feat: add chat history export`       |
+| `fix:`      | Bug fixes        | `fix: resolve authentication issue`   |
+| `docs:`     | Documentation    | `docs: update API documentation`      |
+| `test:`     | Tests            | `test: add chat component tests`      |
+| `refactor:` | Code refactoring | `refactor: optimize database queries` |
+| `style:`    | Code formatting  | `style: fix ESLint warnings`          |
 
-### Pull Request Process
+### Code Style
 
-1. Create a pull request against the `main` branch
-2. Request a review from at least one team member
-3. Address any feedback or requested changes
-4. Once approved, your changes will be merged into the main branch
+- **TypeScript**: Strict mode enabled
+- **ESLint**: Airbnb configuration
+- **Prettier**: 2-space indentation, double quotes
+- **Components**: Functional components with hooks
+- **Testing**: Jest + React Testing Library
 
-## 👥 Team Members
+## 👥 Team
 
-| Name                | Role          | Email                       |
-| ------------------- | ------------- | --------------------------- |
-| Neiña Jeizrei Burce | Space Manager | lr.njburce@mmdc.mcl.edu.ph  |
-| Abigail Galilo      | Team Member   | lr.agalilo@mmdc.mcl.edu.ph  |
-| Michael Angel Lu    | Team Member   | lr.malu@mmdc.mcl.edu.ph     |
-| Redentor Valerio    | Team Member   | lr.rvalerio@mmdc.mcl.edu.ph |
+| Name                    | Role               | Email                       |
+| ----------------------- | ------------------ | --------------------------- |
+| **Neiña Jeizrei Burce** | Project Lead       | lr.njburce@mmdc.mcl.edu.ph  |
+| **Abigail Galilo**      | Frontend Developer | lr.agalilo@mmdc.mcl.edu.ph  |
+| **Michael Angel Lu**    | Backend Developer  | lr.malu@mmdc.mcl.edu.ph     |
+| **Redentor Valerio**    | DevOps Engineer    | lr.rvalerio@mmdc.mcl.edu.ph |
 
-## 📜 License
+## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 🔗 Links
+
+- **Live Application**: [https://brainbytes.redentor.dev](https://brainbytes.redentor.dev)
+- **GitHub Repository**: [https://github.com/redentordev/brainbytes](https://github.com/redentordev/brainbytes)
+- **Documentation**: [/docs](./docs/)
+- **Issues**: [GitHub Issues](https://github.com/redentordev/brainbytes/issues)
+
+---
+
+**Built with ❤️ by the BrainBytes Team**
