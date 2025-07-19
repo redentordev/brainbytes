@@ -23,6 +23,7 @@ import { SubjectManager } from "./subject-manager";
 import { MaterialItem } from "./material-item";
 import { AddMaterialDialog } from "./add-material-dialog";
 import { AddTextEntryDialog } from "./add-text-entry-dialog";
+import { AddFileEntryDialog } from "./add-file-entry-dialog";
 import { AuthError } from "./auth-error";
 
 export function LearningMaterialsSidebar() {
@@ -41,6 +42,8 @@ export function LearningMaterialsSidebar() {
     toggleMaterial,
     removeMaterial,
     removeTextEntryFromMaterial,
+    addFileEntryToMaterial,
+    removeFileEntryFromMaterial,
   } = useLearningMaterials();
   const [isOpen, setIsOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -48,6 +51,7 @@ export function LearningMaterialsSidebar() {
     null
   );
   const [isTextEntryDialogOpen, setIsTextEntryDialogOpen] = useState(false);
+  const [isFileEntryDialogOpen, setIsFileEntryDialogOpen] = useState(false);
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<
     string | null
   >(null);
@@ -200,8 +204,15 @@ export function LearningMaterialsSidebar() {
                       setSelectedMaterialId(material.id);
                       setIsTextEntryDialogOpen(true);
                     }}
+                    onAddFileEntry={() => {
+                      setSelectedMaterialId(material.id);
+                      setIsFileEntryDialogOpen(true);
+                    }}
                     removeTextEntry={(entryId) =>
                       removeTextEntryFromMaterial(material.id, entryId)
+                    }
+                    removeFileEntry={(fileId) =>
+                      removeFileEntryFromMaterial(material.id, fileId)
                     }
                     updateTextEntry={updateTextEntry}
                   />
@@ -224,6 +235,13 @@ export function LearningMaterialsSidebar() {
         onOpenChange={setIsTextEntryDialogOpen}
         materialId={selectedMaterialId}
         addTextEntryToMaterial={addTextEntryToMaterial}
+      />
+
+      <AddFileEntryDialog
+        isOpen={isFileEntryDialogOpen}
+        onOpenChange={setIsFileEntryDialogOpen}
+        materialId={selectedMaterialId}
+        addFileEntryToMaterial={addFileEntryToMaterial}
       />
     </>
   );

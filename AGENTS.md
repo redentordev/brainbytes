@@ -2,28 +2,31 @@
 
 ## Build/Test Commands
 
-- `bun run dev` - Start both frontend and backend in development mode
-- `bun run test` - Run all tests (frontend Jest + backend Vitest)
-- `bun run test:watch` - Run tests in watch mode
-- `bun run test:frontend` - Run frontend tests only (Jest)
-- `bun run test:backend` - Run backend tests only (Vitest)
-- `bun run lint` - Lint all packages (ESLint + Prettier)
+- `bun run dev` - Start frontend in development mode
+- `bun run test` - Run frontend tests (Jest)
+- `bun run test --watch` - Run tests in watch mode
+- `bun run test path/to/test/file.test.ts` - Run single test file
+- `bun run lint` - Lint with ESLint + Prettier check
 - `bun run format` - Format code with Prettier
-- `bun run build` - Build production bundles
+- `bun run typecheck` - TypeScript type checking
+- `bun run build` - Build production bundle
+- `bun run db:generate` - Generate Drizzle migrations
+- `bun run db:migrate` - Run database migrations
+- `bun run db:push` - Push schema changes to database
 
 ## Code Style
 
-- **Formatting**: Prettier with 2-space indentation, double quotes, semicolons
-- **Imports**: Use `@/` for frontend absolute imports, organize by external → internal → relative
-- **Types**: Strict TypeScript, use interfaces for objects, explicit return types for functions
+- **Formatting**: Prettier with 2-space indentation, double quotes, semicolons, 80 char width
+- **Imports**: Use `@/` for absolute imports, organize external → internal → relative
+- **Types**: Strict TypeScript, explicit return types, use interfaces for objects
 - **Naming**: camelCase for variables/functions, PascalCase for components/types, kebab-case for files
-- **Components**: Use React functional components with TypeScript, Radix UI + Tailwind CSS
-- **Error Handling**: Use proper error boundaries, validate with Zod schemas
+- **Components**: React functional components with TypeScript, "use client" for client components
+- **Error Handling**: Zod validation, proper error boundaries, type-safe error handling
 - **State**: Zustand for global state, React Query for server state, Context for component trees
+- **UI**: shadcn/ui + Radix UI components, Tailwind CSS, cn() utility for conditional classes
 
 ## Architecture
 
-- Monorepo with `packages/frontend` (Next.js) and `packages/backend` (Hono + Bun)
-- Database: Drizzle ORM with PostgreSQL
-- Auth: better-auth library
-- UI: shadcn/ui components with Tailwind CSS
+- Monorepo: `packages/app` (Next.js 15) + `packages/core` (Drizzle ORM)
+- Database: Drizzle ORM with PostgreSQL, better-auth for authentication
+- Frontend: React 19, TypeScript strict mode, Tailwind CSS v4

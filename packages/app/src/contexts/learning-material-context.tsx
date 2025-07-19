@@ -12,6 +12,16 @@ export interface MaterialTextEntry {
   dateAdded: Date;
 }
 
+export interface MaterialFileEntry {
+  id: string;
+  title: string;
+  fileName: string;
+  fileUrl: string;
+  fileSize: string;
+  fileType: string;
+  dateAdded: Date;
+}
+
 export interface LearningMaterial {
   id: string;
   title: string;
@@ -20,6 +30,7 @@ export interface LearningMaterial {
   isActive: boolean;
   dateAdded: Date;
   textEntries: MaterialTextEntry[];
+  fileEntries: MaterialFileEntry[];
 }
 
 export interface Subject {
@@ -61,6 +72,15 @@ interface LearningMaterialsContextType {
   removeTextEntryFromMaterial: (
     materialId: string,
     entryId: string
+  ) => Promise<void>;
+  addFileEntryToMaterial: (
+    materialId: string,
+    title: string,
+    file: File
+  ) => Promise<void>;
+  removeFileEntryFromMaterial: (
+    materialId: string,
+    fileId: string
   ) => Promise<void>;
   toggleMaterial: (id: string) => void;
   removeMaterial: (id: string) => Promise<void>;
@@ -695,6 +715,115 @@ export function LearningMaterialsProvider({
     });
   };
 
+  const addFileEntryToMaterial = async (
+    materialId: string,
+    title: string,
+    file: File
+  ): Promise<void> => {
+    try {
+      // Step 1: Get presigned URL
+      const uploadUrlResponse = await fetch(
+        `${API_URL}/materials/${materialId}/files/upload-url`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            fileName: file.name,
+            fileType: file.type,
+          }),
+        }
+      );
+
+      if (!uploadUrlResponse.ok) {
+        const errorData = await uploadUrlResponse.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to get upload URL");
+      }
+
+      const { uploadUrl, fileKey, fileName } = await uploadUrlResponse.json();
+
+      // Step 2: Upload file to S3
+      const uploadResponse = await fetch(uploadUrl, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type,
+          "Content-Disposition": `attachment; filename="${file.name}"`,
+        },
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error("Failed to upload file to S3");
+      }
+
+      // Step 3: Save file entry to database
+      const saveResponse = await fetch(
+        `${API_URL}/materials/${materialId}/files`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            title,
+            fileName,
+            fileKey,
+            fileSize: file.size.toString(),
+            fileType: file.type,
+          }),
+        }
+      );
+
+      if (!saveResponse.ok) {
+        const errorData = await saveResponse.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to save file entry");
+      }
+
+      // Refresh materials
+      queryClient.invalidateQueries(["materials"]);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast.error("Failed to upload file", {
+        description:
+          error instanceof Error ? error.message : "Please try again",
+      });
+      throw error;
+    }
+  };
+
+  const removeFileEntryFromMaterial = async (
+    materialId: string,
+    fileId: string
+  ): Promise<void> => {
+    try {
+      const response = await fetch(
+        `${API_URL}/materials/${materialId}/files?fileId=${fileId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to remove file");
+      }
+
+      // Refresh materials
+      queryClient.invalidateQueries(["materials"]);
+    } catch (error) {
+      console.error("Error removing file:", error);
+      toast.error("Failed to remove file", {
+        description:
+          error instanceof Error ? error.message : "Please try again",
+      });
+      throw error;
+    }
+  };
+
   const isLoading = isMaterialsLoading || isSubjectsLoading;
   const error = materialsError || subjectsError;
 
@@ -713,6 +842,8 @@ export function LearningMaterialsProvider({
         addTextEntryToMaterial,
         updateTextEntry,
         removeTextEntryFromMaterial,
+        addFileEntryToMaterial,
+        removeFileEntryFromMaterial,
         toggleMaterial,
         removeMaterial,
       }}

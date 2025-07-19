@@ -1,0 +1,1 @@
+ALTER TABLE "material_file_entries" ADD COLUMN "content" text;

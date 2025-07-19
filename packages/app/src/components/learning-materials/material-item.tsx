@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { FileText, Loader2, Tag, Trash2, Edit } from "lucide-react";
+import { FileText, Loader2, Tag, Trash2, Edit, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import {
   LearningMaterial,
   MaterialTextEntry,
+  MaterialFileEntry,
 } from "@/contexts/learning-material-context";
 import { cn } from "@/lib/utils";
 import { TextEntryItem } from "./text-entry-item";
@@ -24,7 +25,9 @@ interface MaterialItemProps {
     subject: string
   ) => Promise<void>;
   onAddTextEntry: () => void;
+  onAddFileEntry: () => void;
   removeTextEntry: (entryId: string) => Promise<void>;
+  removeFileEntry: (fileId: string) => Promise<void>;
   updateTextEntry: (
     materialId: string,
     entryId: string,
@@ -40,10 +43,13 @@ export function MaterialItem({
   removeMaterial,
   updateMaterial,
   onAddTextEntry,
+  onAddFileEntry,
   removeTextEntry,
+  removeFileEntry,
   updateTextEntry,
 }: MaterialItemProps) {
   const [showTextEntries, setShowTextEntries] = useState(false);
+  const [showFileEntries, setShowFileEntries] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditMaterialDialogOpen, setIsEditMaterialDialogOpen] =
     useState(false);
@@ -143,7 +149,7 @@ export function MaterialItem({
         </div>
       </div>
 
-      <div className="mt-3">
+      <div className="mt-3 space-y-2">
         <Button
           variant="outline"
           size="sm"
@@ -152,6 +158,15 @@ export function MaterialItem({
         >
           <FileText size={14} className="mr-2" />
           Add Text Entry
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-sm w-full hover:bg-primary/10 hover:border-primary"
+          onClick={onAddFileEntry}
+        >
+          <Upload size={14} className="mr-2" />
+          Upload File
         </Button>
       </div>
 
@@ -186,6 +201,43 @@ export function MaterialItem({
       ) : (
         <div className="mt-3 text-xs text-sidebar-foreground/60 p-2 bg-sidebar-background rounded-md text-center">
           No text entries yet. Add your first entry above.
+        </div>
+      )}
+
+      {/* File Entries Section */}
+      {material.fileEntries && material.fileEntries.length > 0 ? (
+        <div className="mt-3">
+          <div className="flex items-center justify-between">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowFileEntries(!showFileEntries)}
+              className="text-xs p-1 h-auto"
+            >
+              {showFileEntries ? "Hide Files" : "Show Files"} (
+              {material.fileEntries.length})
+            </Button>
+          </div>
+
+          {showFileEntries && (
+            <div className="mt-2 space-y-2 max-h-60 overflow-y-auto p-2 bg-sidebar-background rounded-md">
+              {material.fileEntries.map((entry) => (
+                <div
+                  key={entry.id}
+                  className="p-2 bg-background rounded border"
+                >
+                  <p className="text-sm font-medium">{entry.title}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {entry.fileName}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="mt-3 text-xs text-sidebar-foreground/60 p-2 bg-sidebar-background rounded-md text-center">
+          No files uploaded yet. Upload your first file above.
         </div>
       )}
 

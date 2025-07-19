@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
 
     await Thread.Message.save(id, messages);
 
-    const activeMaterial = await Material.getActiveWithTextEntriesByUserId(
+    const activeMaterial = await Material.getActiveWithAllEntriesByUserId(
       user.id
     );
 
@@ -52,12 +52,31 @@ export async function POST(request: NextRequest) {
       materialContext = `\nYou are helping the user learn about "${activeMaterial.title}"
        (Subject: ${activeMaterial.subject}).\n\n`;
 
-      if (activeMaterial.textEntries && activeMaterial.textEntries.length > 0) {
+      const hasTextEntries =
+        activeMaterial.textEntries && activeMaterial.textEntries.length > 0;
+      const hasFileEntries =
+        activeMaterial.fileEntries && activeMaterial.fileEntries.length > 0;
+
+      if (hasTextEntries || hasFileEntries) {
         materialContext += "Here are the learning materials to focus on:\n\n";
 
-        activeMaterial.textEntries.forEach((entry: Material.TextEntry) => {
-          materialContext += `<material title="${entry.title}">\n${entry.content}\n</material>\n\n`;
-        });
+        // Add text entries
+        if (hasTextEntries) {
+          activeMaterial.textEntries.forEach((entry: Material.TextEntry) => {
+            materialContext += `<material title="${entry.title}" type="text">\n${entry.content}\n</material>\n\n`;
+          });
+        }
+
+        // Add file entries with content
+        if (hasFileEntries) {
+          activeMaterial.fileEntries.forEach((entry: Material.FileEntry) => {
+            if (entry.content && entry.content.trim()) {
+              materialContext += `<material title="${entry.title}" type="file" filename="${entry.fileName}">\n${entry.content}\n</material>\n\n`;
+            } else {
+              materialContext += `<material title="${entry.title}" type="file" filename="${entry.fileName}">\n[File content could not be extracted or is empty]\n</material>\n\n`;
+            }
+          });
+        }
 
         materialContext += `Focus your teaching and responses on the material provided above.
         Use this as your primary knowledge source when helping the user learn this topic.\n`;

@@ -13,6 +13,10 @@ declare module "sst" {
       type: "sst.aws.Nextjs";
       url: string;
     };
+    BrainbytesBucket: {
+      name: string;
+      type: "sst.aws.Bucket";
+    };
     CloudflareAccountId: {
       type: "sst.sst.Secret";
       value: string;

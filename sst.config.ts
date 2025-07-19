@@ -36,9 +36,11 @@ export default $config({
 
     const allSecrets = Object.values(secret);
 
+    const bucket = new sst.aws.Bucket("BrainbytesBucket");
+
     const web = new sst.aws.Nextjs("BrainbytesApp", {
       path: "packages/app",
-      link: [...allSecrets],
+      link: [...allSecrets, bucket],
       domain: {
         dns: sst.cloudflare.dns(),
         name: "brainbytes.redentor.dev",

@@ -26,6 +26,7 @@ export const materialTextEntries = pgTable("material_text_entries", {
 
 export const materialsRelations = relations(materials, ({ many, one }) => ({
   textEntries: many(materialTextEntries),
+  fileEntries: many(materialFileEntries),
   user: one(user, {
     fields: [materials.userId],
     references: [user.id],
@@ -37,6 +38,30 @@ export const materialTextEntriesRelations = relations(
   ({ one }) => ({
     material: one(materials, {
       fields: [materialTextEntries.materialId],
+      references: [materials.id],
+    }),
+  })
+);
+
+export const materialFileEntries = pgTable("material_file_entries", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  materialId: uuid("material_id")
+    .references(() => materials.id, { onDelete: "cascade" })
+    .notNull(),
+  title: text("title").notNull(),
+  fileName: text("file_name").notNull(),
+  fileUrl: text("file_url").notNull(),
+  fileSize: text("file_size").notNull(),
+  fileType: text("file_type").notNull(),
+  content: text("content"),
+  dateAdded: timestamp("date_added").defaultNow(),
+});
+
+export const materialFileEntriesRelations = relations(
+  materialFileEntries,
+  ({ one }) => ({
+    material: one(materials, {
+      fields: [materialFileEntries.materialId],
       references: [materials.id],
     }),
   })

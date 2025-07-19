@@ -1,9 +1,17 @@
 import { type InferSelectModel, type InferInsertModel } from "drizzle-orm";
 import { eq, and, inArray, ne } from "drizzle-orm";
 import { db } from "../index";
-import { materials, materialTextEntries, subjects } from "./material.sql";
+import {
+  materials,
+  materialTextEntries,
+  materialFileEntries,
+  subjects,
+} from "./material.sql";
 
 export * from "./material.sql";
+export * from "./file-service";
+export * from "./s3-service";
+export * from "./content-extraction-service";
 
 export namespace Material {
   export type Info = InferSelectModel<typeof materials>;
@@ -12,11 +20,24 @@ export namespace Material {
   export type TextEntry = InferSelectModel<typeof materialTextEntries>;
   export type NewTextEntry = InferInsertModel<typeof materialTextEntries>;
 
+  export type FileEntry = InferSelectModel<typeof materialFileEntries>;
+  export type NewFileEntry = InferInsertModel<typeof materialFileEntries>;
+
   export type Subject = InferSelectModel<typeof subjects>;
   export type NewSubject = InferInsertModel<typeof subjects>;
 
   export type WithTextEntries = Info & {
     textEntries: TextEntry[];
+  };
+
+  export type WithAllEntries = Info & {
+    textEntries: TextEntry[];
+    fileEntries: FileEntry[];
+  };
+
+  export type WithAllEntriesForChat = Info & {
+    textEntries: TextEntry[];
+    fileEntries: FileEntry[];
   };
 
   export async function getAll(): Promise<Info[]> {
@@ -142,7 +163,7 @@ export namespace Material {
 
   export async function getAllWithTextEntriesByUserId(
     userId: string
-  ): Promise<WithTextEntries[]> {
+  ): Promise<WithAllEntries[]> {
     const userMaterials = await getByUserId(userId);
 
     const materialIds = userMaterials.map((material) => material.id);
@@ -151,10 +172,16 @@ export namespace Material {
       return [];
     }
 
-    const allTextEntries = await db
-      .select()
-      .from(materialTextEntries)
-      .where(inArray(materialTextEntries.materialId, materialIds));
+    const [allTextEntries, allFileEntries] = await Promise.all([
+      db
+        .select()
+        .from(materialTextEntries)
+        .where(inArray(materialTextEntries.materialId, materialIds)),
+      db
+        .select()
+        .from(materialFileEntries)
+        .where(inArray(materialFileEntries.materialId, materialIds)),
+    ]);
 
     const textEntriesByMaterialId = allTextEntries.reduce(
       (grouped, entry) => {
@@ -168,9 +195,22 @@ export namespace Material {
       {} as Record<string, TextEntry[]>
     );
 
+    const fileEntriesByMaterialId = allFileEntries.reduce(
+      (grouped, entry) => {
+        const materialId = entry.materialId;
+        if (!grouped[materialId]) {
+          grouped[materialId] = [];
+        }
+        grouped[materialId].push(entry);
+        return grouped;
+      },
+      {} as Record<string, FileEntry[]>
+    );
+
     return userMaterials.map((material) => ({
       ...material,
       textEntries: textEntriesByMaterialId[material.id] || [],
+      fileEntries: fileEntriesByMaterialId[material.id] || [],
     }));
   }
 
@@ -214,6 +254,39 @@ export namespace Material {
     return {
       ...activeMaterial,
       textEntries,
+    };
+  }
+
+  export async function getActiveWithAllEntriesByUserId(
+    userId: string
+  ): Promise<WithAllEntriesForChat | null> {
+    const userMaterials = await db
+      .select()
+      .from(materials)
+      .where(and(eq(materials.userId, userId), eq(materials.isActive, true)))
+      .limit(1);
+
+    if (userMaterials.length === 0) {
+      return null;
+    }
+
+    const activeMaterial = userMaterials[0]!;
+
+    const [textEntries, fileEntries] = await Promise.all([
+      db
+        .select()
+        .from(materialTextEntries)
+        .where(eq(materialTextEntries.materialId, activeMaterial.id)),
+      db
+        .select()
+        .from(materialFileEntries)
+        .where(eq(materialFileEntries.materialId, activeMaterial.id)),
+    ]);
+
+    return {
+      ...activeMaterial,
+      textEntries,
+      fileEntries,
     };
   }
 
