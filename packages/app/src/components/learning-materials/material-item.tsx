@@ -6,10 +6,10 @@ import { toast } from "sonner";
 import {
   LearningMaterial,
   MaterialTextEntry,
-  MaterialFileEntry,
 } from "@/contexts/learning-material-context";
 import { cn } from "@/lib/utils";
 import { TextEntryItem } from "./text-entry-item";
+import { FileEntryItem } from "./file-entry-item";
 import { EditMaterialDialog } from "./edit-material-dialog";
 import { EditTextEntryDialog } from "./edit-text-entry-dialog";
 
@@ -222,15 +222,11 @@ export function MaterialItem({
           {showFileEntries && (
             <div className="mt-2 space-y-2 max-h-60 overflow-y-auto p-2 bg-sidebar-background rounded-md">
               {material.fileEntries.map((entry) => (
-                <div
+                <FileEntryItem
                   key={entry.id}
-                  className="p-2 bg-background rounded border"
-                >
-                  <p className="text-sm font-medium">{entry.title}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {entry.fileName}
-                  </p>
-                </div>
+                  entry={entry}
+                  onRemove={() => removeFileEntry(entry.id)}
+                />
               ))}
             </div>
           )}
