@@ -153,7 +153,7 @@ export function AddFileEntryDialog({
               </div>
             )}
             <p className="text-xs text-muted-foreground">
-              Supported formats: PDF, Word (.doc, .docx), TXT. Max size: 10MB
+              Supported formats: TXT, Markdown (.md). Max size: 10MB
             </p>
           </div>
         </div>

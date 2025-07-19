@@ -76,12 +76,7 @@ export namespace MaterialFile {
     return material.length > 0;
   }
 
-  export const ALLOWED_FILE_TYPES = [
-    "application/pdf",
-    "application/msword",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "text/plain",
-  ] as const;
+  export const ALLOWED_FILE_TYPES = ["text/plain", "text/markdown"] as const;
 
   export function validateFileType(fileType: string): boolean {
     return ALLOWED_FILE_TYPES.includes(fileType as any);
