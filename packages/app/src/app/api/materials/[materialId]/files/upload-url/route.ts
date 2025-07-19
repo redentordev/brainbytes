@@ -5,7 +5,7 @@ import { MaterialFile, S3Service } from "@brainbytes/core/material";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { materialId: string } }
+  { params }: { params: Promise<{ materialId: string }> }
 ) {
   try {
     const session = await auth.api.getSession({
@@ -16,7 +16,7 @@ export async function POST(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { materialId } = params;
+    const { materialId } = await params;
     const { fileName, fileType } = await request.json();
 
     if (!fileName || !fileType) {

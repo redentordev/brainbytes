@@ -9,7 +9,7 @@ import {
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { materialId: string } }
+  { params }: { params: Promise<{ materialId: string }> }
 ) {
   try {
     const session = await auth.api.getSession({
@@ -20,7 +20,7 @@ export async function POST(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { materialId } = params;
+    const { materialId } = await params;
     const { title, fileName, fileKey, fileSize, fileType } =
       await request.json();
 
@@ -95,7 +95,7 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { materialId: string } }
+  { params }: { params: Promise<{ materialId: string }> }
 ) {
   try {
     const session = await auth.api.getSession({
@@ -106,7 +106,7 @@ export async function DELETE(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { materialId } = params;
+    const { materialId } = await params;
     const url = new URL(request.url);
     const fileId = url.searchParams.get("fileId");
 
