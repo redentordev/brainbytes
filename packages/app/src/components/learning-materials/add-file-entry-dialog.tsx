@@ -36,16 +36,19 @@ export function AddFileEntryDialog({
     const file = event.target.files?.[0];
     if (file) {
       // Validate file type
-      const allowedTypes = [
-        "application/pdf",
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "text/plain",
-      ];
+      const allowedTypes = ["text/plain", "text/markdown"];
 
-      if (!allowedTypes.includes(file.type)) {
+      const allowedExtensions = [".txt", ".md", ".markdown"];
+      const fileExtension = file.name
+        .toLowerCase()
+        .substring(file.name.lastIndexOf("."));
+
+      if (
+        !allowedTypes.includes(file.type) &&
+        !allowedExtensions.includes(fileExtension)
+      ) {
         toast.error("Invalid file type", {
-          description: "Only PDF, Word, and TXT files are allowed.",
+          description: "Only .txt and .md files are allowed.",
         });
         return;
       }
@@ -131,7 +134,7 @@ export function AddFileEntryDialog({
               <Input
                 id="file-upload"
                 type="file"
-                accept=".pdf,.doc,.docx,.txt"
+                accept=".txt,.md"
                 onChange={handleFileChange}
                 className="file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-sm file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
               />
