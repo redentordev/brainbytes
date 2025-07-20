@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
 
     const result = streamText({
       model: OAI("gpt-4o-mini"),
-      system: `You are BrainBytes AI, a chatbot designed to help students with their questions. 
+      system: `You are BrainRots AI, a chatbot designed to help students with their questions. 
 
        You are developed by BrainBytes Team.
        The team is made of 4 students from Mapua Malayan Digital College.
