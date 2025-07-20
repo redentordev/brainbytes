@@ -280,6 +280,20 @@ BrainBytes uses GitHub Actions for continuous integration and deployment with co
 
 For detailed deployment procedures, see: [Detailed Deployment Plan](docs/detailed-deployment-plan.md)
 
+### CloudWatch Monitoring
+
+![CloudWatch Logs](docs/cloudwatch-logs.png)
+
+![CloudWatch Metrics](docs/cloudwatch-metrics.png)
+
+![CloudWatch Alarms](docs/cloudwatch-alarms.png)
+
+BrainBytes implements comprehensive monitoring through AWS CloudWatch:
+
+- **Logs**: Real-time application logs with request tracking and error monitoring
+- **Metrics**: Lambda function performance metrics including invocations, duration, and success rates
+- **Alarms**: Automated error detection and alerting for proactive issue resolution
+
 ## 🧪 Testing
 
 ### Test Coverage & Results
