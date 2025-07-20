@@ -70,6 +70,8 @@ brainbytes/
 - **Infrastructure**: SST (Serverless Stack) for AWS deployment
 - **Monitoring**: CloudWatch logs, metrics, and automated alerting
 
+![CloudWatch Logs](docs/cloudwatch-logs.png) ![CloudWatch Metrics](docs/cloudwatch-metrics.png) ![CloudWatch Alarms](docs/cloudwatch-alarms.png)
+
 ### Deployment Architecture
 
 For detailed architecture diagrams and infrastructure documentation, see:
@@ -90,7 +92,7 @@ For detailed architecture diagrams and infrastructure documentation, see:
 | **Runtime**        | Bun                     | Fast JavaScript runtime       |
 | **Infrastructure** | SST, AWS                | Cloud deployment              |
 | **CI/CD**          | GitHub Actions          | Automation                    |
-| **Monitoring**     | Cloudflare Analytics    | Performance tracking          |
+| **Monitoring**     | CloudWatch              | Metrics, logs, and alarms     |
 
 ## 🚀 Quick Start
 
