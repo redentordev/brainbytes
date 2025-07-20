@@ -14,6 +14,7 @@ export interface MaterialTextEntry {
 
 export interface MaterialFileEntry {
   id: string;
+  materialId: string;
   title: string;
   fileName: string;
   fileUrl: string;

@@ -19,10 +19,6 @@ export async function POST(
     const { materialId } = await params;
     const { fileName, fileType } = await request.json();
 
-    console.log(
-      `Upload URL request: fileName=${fileName}, fileType=${fileType}`
-    );
-
     if (!fileName || !fileType) {
       return Response.json(
         { error: "fileName and fileType are required" },
@@ -35,10 +31,6 @@ export async function POST(
     const fileExtension = fileName
       .toLowerCase()
       .substring(fileName.lastIndexOf("."));
-
-    console.log(
-      `File validation: extension=${fileExtension}, type=${fileType}`
-    );
 
     if (!allowedExtensions.includes(fileExtension)) {
       return Response.json(

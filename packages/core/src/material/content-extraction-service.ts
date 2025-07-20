@@ -1,3 +1,5 @@
+import { S3Service } from "./s3-service";
+
 export namespace ContentExtractionService {
   export interface ExtractionResult {
     content: string;
@@ -79,6 +81,33 @@ export namespace ContentExtractionService {
         content: "",
         success: false,
         error: `Failed to download and extract content: ${error instanceof Error ? error.message : "Unknown error"}`,
+      };
+    }
+  }
+
+  export async function extractFromS3Key(
+    fileKey: string,
+    fileType: string,
+    fileName: string
+  ): Promise<ExtractionResult> {
+    try {
+      console.log(
+        `ContentExtractionService: Fetching file from S3 with key: ${fileKey}`
+      );
+
+      const buffer = await S3Service.getFileBuffer(fileKey);
+
+      console.log(
+        `ContentExtractionService: Successfully fetched ${buffer.length} bytes from S3`
+      );
+
+      return await extractFromBuffer(buffer, fileType, fileName);
+    } catch (error) {
+      console.log(`ContentExtractionService: Error fetching from S3:`, error);
+      return {
+        content: "",
+        success: false,
+        error: `Failed to fetch file from S3: ${error instanceof Error ? error.message : "Unknown error"}`,
       };
     }
   }

@@ -10,6 +10,7 @@ interface FileEntryItemProps {
 
 export function FileEntryItem({ entry, onRemove }: FileEntryItemProps) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isGeneratingPreview, setIsGeneratingPreview] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -19,6 +20,32 @@ export function FileEntryItem({ entry, onRemove }: FileEntryItemProps) {
       // Error is already handled in the context
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handlePreview = async () => {
+    try {
+      setIsGeneratingPreview(true);
+
+      const response = await fetch(
+        `/api/materials/${entry.materialId}/files/${entry.id}/preview`,
+        {
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to generate preview URL");
+      }
+
+      const { previewUrl } = await response.json();
+      window.open(previewUrl, "_blank");
+    } catch (error) {
+      console.error("Error generating preview:", error);
+      // Fallback to direct URL (though it might not work)
+      window.open(entry.fileUrl, "_blank");
+    } finally {
+      setIsGeneratingPreview(false);
     }
   };
 
@@ -56,10 +83,15 @@ export function FileEntryItem({ entry, onRemove }: FileEntryItemProps) {
           variant="ghost"
           size="icon"
           className="h-7 w-7"
-          onClick={() => window.open(entry.fileUrl, "_blank")}
+          onClick={handlePreview}
+          disabled={isGeneratingPreview}
           title="Open file"
         >
-          <ExternalLink size={12} />
+          {isGeneratingPreview ? (
+            <Loader2 size={12} className="animate-spin" />
+          ) : (
+            <ExternalLink size={12} />
+          )}
         </Button>
         <Button
           variant="ghost"

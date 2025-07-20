@@ -46,25 +46,17 @@ export async function POST(
     // Generate public URL for the file
     const fileUrl = S3Service.getPublicUrl(fileKey);
 
-    // Extract content from the uploaded file
+    // Extract content from the uploaded file using S3 key
     let extractedContent: string | null = null;
     try {
-      console.log(`Starting content extraction for ${fileName} (${fileType})`);
-      console.log(`File URL: ${fileUrl}`);
-
-      const extractionResult = await ContentExtractionService.extractFromUrl(
-        fileUrl,
+      const extractionResult = await ContentExtractionService.extractFromS3Key(
+        fileKey,
         fileType,
         fileName
       );
 
-      console.log(`Extraction result:`, extractionResult);
-
       if (extractionResult.success) {
         extractedContent = extractionResult.content;
-        console.log(
-          `Successfully extracted ${extractedContent?.length || 0} characters`
-        );
       } else {
         console.warn(
           `Content extraction failed for ${fileName}: ${extractionResult.error}`
@@ -72,9 +64,7 @@ export async function POST(
       }
     } catch (error) {
       console.warn(`Content extraction error for ${fileName}:`, error);
-    }
-
-    // Insert the file entry with extracted content
+    } // Insert the file entry with extracted content
     const fileEntry = await MaterialFile.add({
       materialId,
       title,
