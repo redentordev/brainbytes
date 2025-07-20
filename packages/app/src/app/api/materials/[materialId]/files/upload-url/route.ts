@@ -19,6 +19,10 @@ export async function POST(
     const { materialId } = await params;
     const { fileName, fileType } = await request.json();
 
+    console.log(
+      `Upload URL request: fileName=${fileName}, fileType=${fileType}`
+    );
+
     if (!fileName || !fileType) {
       return Response.json(
         { error: "fileName and fileType are required" },
@@ -26,12 +30,21 @@ export async function POST(
       );
     }
 
-    // Validate file type
-    if (!MaterialFile.validateFileType(fileType)) {
+    // Validate file type - be more permissive with MIME types since browsers can be inconsistent
+    const allowedExtensions = [".txt", ".md", ".markdown"];
+    const fileExtension = fileName
+      .toLowerCase()
+      .substring(fileName.lastIndexOf("."));
+
+    console.log(
+      `File validation: extension=${fileExtension}, type=${fileType}`
+    );
+
+    if (!allowedExtensions.includes(fileExtension)) {
       return Response.json(
         {
           error:
-            "File type not supported. Only PDF, Word, and TXT files are allowed.",
+            "File type not supported. Only .txt and .md files are allowed.",
         },
         { status: 400 }
       );

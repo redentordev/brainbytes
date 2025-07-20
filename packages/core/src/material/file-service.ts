@@ -26,11 +26,29 @@ export namespace MaterialFile {
   }
 
   export async function add(data: NewFileEntry): Promise<FileEntry> {
+    console.log(`MaterialFile.add: Inserting file entry with data:`, {
+      ...data,
+      content: data.content ? `${data.content.length} characters` : "null",
+    });
+
     const [entry] = await db
       .insert(materialFileEntries)
       .values(data)
       .returning();
-    return entry!;
+
+    if (!entry) {
+      throw new Error("Failed to insert file entry");
+    }
+
+    console.log(
+      `MaterialFile.add: Successfully inserted entry with ID: ${entry.id}`
+    );
+    console.log(
+      `MaterialFile.add: Content saved:`,
+      entry.content ? `${entry.content.length} characters` : "null"
+    );
+
+    return entry;
   }
 
   export async function update(

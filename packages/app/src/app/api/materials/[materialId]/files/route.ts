@@ -49,14 +49,22 @@ export async function POST(
     // Extract content from the uploaded file
     let extractedContent: string | null = null;
     try {
+      console.log(`Starting content extraction for ${fileName} (${fileType})`);
+      console.log(`File URL: ${fileUrl}`);
+
       const extractionResult = await ContentExtractionService.extractFromUrl(
         fileUrl,
         fileType,
         fileName
       );
 
+      console.log(`Extraction result:`, extractionResult);
+
       if (extractionResult.success) {
         extractedContent = extractionResult.content;
+        console.log(
+          `Successfully extracted ${extractedContent?.length || 0} characters`
+        );
       } else {
         console.warn(
           `Content extraction failed for ${fileName}: ${extractionResult.error}`
